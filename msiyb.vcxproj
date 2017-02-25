@@ -18,6 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="server\desktop\src\main.cpp" />
+    <ClCompile Include="server\desktop\src\server.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="server\desktop\src\net\socket.h" />
+    <ClInclude Include="server\desktop\src\server.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D98F9A90-BA3A-404A-82AF-0E06ED83E95F}</ProjectGuid>
     <RootNamespace>msiyb</RootNamespace>
@@ -109,8 +117,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
