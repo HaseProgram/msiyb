@@ -6,6 +6,8 @@
 
 int main()
 {
+
+// Çהוסü בûכ MMMavr
 	Server* serverInstance = new Server;
 	
 	int failCount = 0;
