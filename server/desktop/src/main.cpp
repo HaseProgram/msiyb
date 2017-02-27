@@ -1,12 +1,11 @@
-/*
-	TODO: logger.h
-*/
-#include "inc/exception.h"
-#include "server.h"
+#include "stdafx.h"
+#include "main.h"
+
+using namespace std;
 
 int main()
 {
-	Server* serverInstance = new Server;
+	auto_ptr<Server> serverInstance(new Server);
 	
 	int failCount = 0;
 	while (failCount < 5)

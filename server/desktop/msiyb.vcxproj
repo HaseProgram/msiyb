@@ -19,12 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="server\desktop\src\main.cpp" />
-    <ClCompile Include="server\desktop\src\server.cpp" />
+    <ClCompile Include="src\common\fileagent.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\server.cpp" />
+    <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="server\desktop\src\net\socket.h" />
-    <ClInclude Include="server\desktop\src\server.h" />
+    <ClInclude Include="src\common\fileagent.h" />
+    <ClInclude Include="src\cross\ifile.h" />
+    <ClInclude Include="src\cross\windows\file.h" />
+    <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\net\socket.h" />
+    <ClInclude Include="src\server.h" />
+    <ClInclude Include="src\stdafx.h" />
+    <ClInclude Include="src\tools\exception.h" />
+    <ClInclude Include="src\tools\logger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D98F9A90-BA3A-404A-82AF-0E06ED83E95F}</ProjectGuid>
@@ -82,6 +91,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
