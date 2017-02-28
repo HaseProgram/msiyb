@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "main.h"
+#include "common\fileagent.h"
 
 using namespace std;
 
@@ -17,13 +18,10 @@ int main()
 		}
 		catch (Exception& error)
 		{
-			/*
-				Error output
-			*/
-
+			printf("%s\n",error.what());
 			failCount++;
 		}
 	}
-	
+
 	return 1;
 }

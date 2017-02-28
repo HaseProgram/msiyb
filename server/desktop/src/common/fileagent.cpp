@@ -3,17 +3,25 @@
 
 FileAgent::FileAgent()
 {
-	this->info = nullptr;
 	this->file = new File;
 }
 
 FileAgent::FileAgent(char* filename)
 {
-	this->info->filename = filename;
-	this->file = new File;
+	this->file = new File(filename);
 }
 
 FileAgent::~FileAgent()
 {
 	delete this->file;
+}
+
+void FileAgent::Open(FileOpenMode mode)
+{
+	this->file->Open(mode);
+}
+
+void FileAgent::Close()
+{
+	this->file->Close();
 }
