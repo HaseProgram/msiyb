@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\common\fileagent.cpp" />
-    <ClCompile Include="src\cross\windows\file.cpp" />
+    <ClCompile Include="src\common\filea.cpp" />
+    <ClCompile Include="src\cross\windows\fileimpl.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\server.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
@@ -28,7 +28,7 @@
   <ItemGroup>
     <ClInclude Include="src\common\fileagent.h" />
     <ClInclude Include="src\cross\ifile.h" />
-    <ClInclude Include="src\cross\windows\file.h" />
+    <ClInclude Include="src\cross\windows\fileimpl.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\net\socket.h" />
     <ClInclude Include="src\server.h" />

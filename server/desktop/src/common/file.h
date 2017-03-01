@@ -1,5 +1,5 @@
 /*!
-\file fileagent.h "server\desktop\src\common\fileagent.h"
+\file file.h "server\desktop\src\common\file.h"
 \authors Alexandr Barulev, Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
@@ -10,39 +10,39 @@
 #pragma once
 
 #ifdef _WIN32
-#include "../cross/windows/file.h"
+#include "../cross/windows/fileimpl.h"
 #elif _unix_
-#include "../cross/unix/file.h"
+#include "../cross/unix/fileimpl.h"
 #endif
 
 using namespace std;
 
 
 /*!
-\class FileAgent fileagent.h "server\desktop\src\common\fileagent.h"
+\class File file.h "server\desktop\src\common\file.h"
 \brief  File interface
 Provide interface to common file structure and it's action
 Factory for unix/bsd/windows structure of file
 */
-class FileAgent
+class File
 {
 public:
 	/*!
 	Initialise OS depended file structure
 	*/
-	FileAgent();
+	File();
 
 	/*!
 	Initialise OS depended file structure
 	Set full file name in File class meta structure
 	\param[in] filename Name of file with it's local path
 	*/
-	FileAgent(char* filename);
+	File(char* filename);
 
 	/*!
 	Dealocate OS depended File object
 	*/
-	~FileAgent();
+	~File();
 
 	/*!
 	Opens file with defined open rule

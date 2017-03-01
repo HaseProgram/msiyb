@@ -1,5 +1,5 @@
 /*!
-\file file.h "server\desktop\src\cross\windows\file.h"
+\file fileimpl.h "server\desktop\src\cross\windows\fileimpl.h"
 \authors Alexandr Barulev, Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
@@ -11,11 +11,11 @@
 #include "../ifile.h"
 
 /*!
-\class File file.h "server\desktop\src\cross\windows\file.h"
+\class FileImpl fileimpl.h "server\desktop\src\cross\windows\fileimpl.h"
 \brief  Windows depended structure of file
 Provides windows-specified access to file methods
 */
-class File : public IFile
+class FileImpl : public IFile
 {
 public:
 	HANDLE hfile;	/// File descriptor
@@ -25,18 +25,18 @@ public:
 	Allocate memory for meta structure
 	Set file usage state: false
 	*/
-	File();
+	FileImpl();
 
 	/*!
 	Allocate memory for meta structure and set path to file (filename)
 	Set file usage state: false
 	*/
-	File(char* filename);
+	FileImpl(char* filename);
 
 	/*!
 	Dealocates memory
 	*/
-	~File();
+	~FileImpl();
 
 	/*
 	Check if file exists. Path to file will be taken from meta data.

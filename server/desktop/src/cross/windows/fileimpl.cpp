@@ -1,26 +1,26 @@
 #include "stdafx.h"
 #include "../../stdafx.h"
-#include "file.h"
+#include "fileimpl.h"
 
-File::File()
+FileImpl::FileImpl()
 {
 	this->meta = new FileMeta;
 	this->inuse = false;
 }
 
-File::File(char* filename)
+FileImpl::FileImpl(char* filename)
 {
 	this->meta = new FileMeta;
 	this->meta->filename = filename;
 	inuse = false;
 }
 
-File::~File()
+FileImpl::~FileImpl()
 {
 	delete this->meta;
 }
 
-bool File::Exists()
+bool FileImpl::Exists()
 {
 	if (!this->meta->filename)
 	{
@@ -29,14 +29,14 @@ bool File::Exists()
 	return this->Exists(this->meta->filename);
 }
 
-bool File::Exists(const char* filename)
+bool FileImpl::Exists(const char* filename)
 {
 	wchar_t w_filename[_MAX_PATH];
 	mbstowcs(w_filename, filename, strlen(filename) + 1);
-	return File::Exists(w_filename);
+	return FileImpl::Exists(w_filename);
 }
 
-bool File::Exists(const wchar_t* w_filename)
+bool FileImpl::Exists(const wchar_t* w_filename)
 {
 	WIN32_FIND_DATA FindFileData;
 	HANDLE handle = FindFirstFile(w_filename, &FindFileData);
@@ -48,25 +48,25 @@ bool File::Exists(const wchar_t* w_filename)
 	return found;
 }
 
-void File::Open(FileOpenMode mode)
+void FileImpl::Open(FileOpenMode mode)
 {
 	if (!this->meta->filename)
 	{
 		throw Exception("Trying to open file while no file name specified!", GetLastError());
 	}
-	hfile = File::Open(this->meta->filename, mode);
+	hfile = FileImpl::Open(this->meta->filename, mode);
 	this->inuse = true;
 }
 
-HANDLE File::Open(const char* filename, FileOpenMode mode)
+HANDLE FileImpl::Open(const char* filename, FileOpenMode mode)
 {
 	wchar_t w_filename[_MAX_PATH];
 	mbstowcs(w_filename, filename, strlen(filename) + 1);
 
-	return File::Open(w_filename, mode);
+	return FileImpl::Open(w_filename, mode);
 }
 
-HANDLE File::Open(const wchar_t* w_filename, FileOpenMode mode)
+HANDLE FileImpl::Open(const wchar_t* w_filename, FileOpenMode mode)
 {
 	DWORD creationDisposition = OPEN_EXISTING;
 	DWORD desiredAccess;
@@ -93,12 +93,12 @@ HANDLE File::Open(const wchar_t* w_filename, FileOpenMode mode)
 	return hfile;
 }
 
-void File::Close()
+void FileImpl::Close()
 {
-	File::Close(this->hfile);
+	FileImpl::Close(this->hfile);
 }
 
-void File::Close(HANDLE hfile)
+void FileImpl::Close(HANDLE hfile)
 {
 	if (!CloseHandle(hfile))
 	{
