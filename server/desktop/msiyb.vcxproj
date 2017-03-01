@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\common\filea.cpp" />
+    <ClCompile Include="src\common\file.cpp" />
     <ClCompile Include="src\cross\windows\fileimpl.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\server.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\common\fileagent.h" />
+    <ClInclude Include="src\common\file.h" />
     <ClInclude Include="src\cross\ifile.h" />
     <ClInclude Include="src\cross\windows\fileimpl.h" />
     <ClInclude Include="src\main.h" />
