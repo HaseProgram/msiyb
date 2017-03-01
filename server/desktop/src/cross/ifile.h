@@ -38,7 +38,7 @@ public:
 	FileMeta* meta;	///< Meta data
 
 	/*
-	Check if file exists. Path to file will take from meta data.
+	Check if file exists. Path to file will be taken from meta data.
 	\return YES if file exists; NO in other case
 	*/
 	virtual bool Exists() = 0;
