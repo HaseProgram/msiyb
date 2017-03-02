@@ -19,16 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\common\dir.cpp" />
     <ClCompile Include="src\common\file.cpp" />
+    <ClCompile Include="src\common\thread.cpp" />
     <ClCompile Include="src\cross\windows\fileimpl.cpp" />
+    <ClCompile Include="src\cross\windows\winthread.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\server.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\common\dir.h" />
     <ClInclude Include="src\common\file.h" />
+    <ClInclude Include="src\common\thread.h" />
+    <ClInclude Include="src\cross\idir.h" />
     <ClInclude Include="src\cross\ifile.h" />
+    <ClInclude Include="src\cross\ithread.h" />
     <ClInclude Include="src\cross\windows\fileimpl.h" />
+    <ClInclude Include="src\cross\windows\windir.h" />
+    <ClInclude Include="src\cross\windows\winthread.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\net\socket.h" />
     <ClInclude Include="src\server.h" />

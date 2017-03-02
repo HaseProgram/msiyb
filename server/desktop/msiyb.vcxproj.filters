@@ -45,7 +45,16 @@
     <ClCompile Include="src\cross\windows\fileimpl.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\filea.cpp">
+    <ClCompile Include="src\common\file.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\dir.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cross\windows\winthread.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\thread.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,14 +77,32 @@
     <ClInclude Include="src\cross\ifile.h">
       <Filter>Заголовочные файлы\cross</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\fileagent.h">
-      <Filter>Заголовочные файлы\common</Filter>
-    </ClInclude>
     <ClInclude Include="src\stdafx.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="src\cross\windows\fileimpl.h">
       <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\file.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\dir.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\windows\windir.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\idir.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\thread.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\windows\winthread.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\ithread.h">
+      <Filter>Заголовочные файлы\cross</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
