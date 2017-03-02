@@ -45,18 +45,18 @@
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\tools\exception.h" />
     <ClInclude Include="src\tools\exceptions\fileexception.h" />
+    <ClInclude Include="src\tools\exceptions\thredexception.h" />
     <ClInclude Include="src\tools\logger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D98F9A90-BA3A-404A-82AF-0E06ED83E95F}</ProjectGuid>
     <RootNamespace>msiyb</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

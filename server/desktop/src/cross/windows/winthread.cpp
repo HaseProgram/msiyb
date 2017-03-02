@@ -7,15 +7,10 @@ WinThread::WinThread()
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo(&sysinfo);
 	this->maxThreadsCount = sysinfo.dwNumberOfProcessors;
+	this->threadID = -1;
 }
 
-int WinThread::GetMaxThreadCount()
-{
-	return this->maxThreadsCount;
-}
-
-void WinThread::Init(LPSECURITY_ATTRIBUTES threadSecurityAttributes, SIZE_T threadStackSize,
-	LPTHREAD_START_ROUTINE threadFunc, LPVOID threadFuncArgs, DWORD threadFlags)
+void WinThread::Init(LPTHREAD_START_ROUTINE threadFunc, LPVOID threadFuncArgs, SIZE_T threadStackSize, DWORD threadFlags, LPSECURITY_ATTRIBUTES threadSecurityAttributes)
 {
 	this->threadSecurityAttributes = threadSecurityAttributes;
 	this->threadStackSize = threadStackSize;
@@ -24,25 +19,62 @@ void WinThread::Init(LPSECURITY_ATTRIBUTES threadSecurityAttributes, SIZE_T thre
 	this->threadFlags = threadFlags;
 }
 
-void WinThread::Start()
+void WinThread::Init(void * threadFunc, void * threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes)
 {
-	if (CreateThread(this->threadSecurityAttributes, 
-		this->threadStackSize, 
-		this->threadFunc,
-		this->threadFuncArgs,
-		this->threadFlags,
-		&this->threadID) == NULL)
+	this->threadFunc = (LPTHREAD_START_ROUTINE)threadFunc;
+	this->threadFuncArgs = threadFuncArgs;
+	this->threadStackSize = threadStackSize;
+	switch (threadFlags)
 	{
-		throw Exception("Can not create thread"); // Temporary, will change after Sasha's exception push
+	case RUNIMMEDIATLY:
+		this->threadFlags = 0;
+		break;
+	case CREATESUSPENDED:
+		this->threadFlags = CREATE_SUSPENDED;
+		break;
+	case RESERVESTACK:
+		this->threadFlags = STACK_SIZE_PARAM_IS_A_RESERVATION;
+		break;
+	}
+	switch (threadSecurityAttributes)
+	{
+	case ENULL:
+		this->threadSecurityAttributes = NULL;
+		break;
 	}
 }
 
-void WinThread::Interrupt()
+int WinThread::GetMaxThreadCount()
 {
+	return this->maxThreadsCount;
+}
 
+void WinThread::Start()
+{
+	this->hThread = CreateThread(this->threadSecurityAttributes,
+		this->threadStackSize,
+		this->threadFunc,
+		this->threadFuncArgs,
+		this->threadFlags,
+		&this->threadID);
+
+	if(!this->hThread)
+	{
+		ThrowThreadException("Could not create new thread!");
+	}
 }
 
 long WinThread::GetThreadID()
 {
 	return this->threadID;
+}
+
+bool WinThread::CheckActive()
+{
+	int status = GetExitCodeThread(this->hThread, this->exitCode);
+	if (status == 0)
+	{
+		ThrowThreadExceptionWithCode("Can not check thread status!", GetLastError());
+	}
+	return (status == STILL_ACTIVE);
 }

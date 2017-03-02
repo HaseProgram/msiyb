@@ -1,5 +1,6 @@
 #pragma once
 #include <exception>
+#include "../stdafx.h"
 
 #ifdef _WIN32 
 #define LastError GetLastError()
@@ -75,14 +76,14 @@ public:
 
 	Exception(const char* message, const  char* file, const char* function, int line, long errCode)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occoured.\n Error message:\n %s\n Error code:", file, function, line, message, errCode);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message:\n %s\n Error code:", file, function, line, message, errCode);
 		this->errCode = errCode;
 	}
 
 
 	Exception(const char* message, const char* file, const char* function, int line)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occoured.\n Error message:\n %s\n", file, function, line, message);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message:\n %s\n", file, function, line, message);
 		this->errCode = errCode;
 	}
 
