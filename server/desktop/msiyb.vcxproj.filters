@@ -28,8 +28,11 @@
     <Filter Include="Заголовочные файлы\cross\unix">
       <UniqueIdentifier>{13ee331e-7fbc-4680-bbe6-d0b46f4032b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\common">
+    <Filter Include="Заголовочные файлы\cross\common">
       <UniqueIdentifier>{85bd9b05-eb1e-4a8e-b151-821f769293bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\tools\exceptions">
+      <UniqueIdentifier>{b9e3de45-e213-4cb9-84ad-50b9e4aa7919}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,7 +48,7 @@
     <ClCompile Include="src\cross\windows\fileimpl.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\filea.cpp">
+    <ClCompile Include="src\common\file.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,23 +62,29 @@
     <ClInclude Include="src\net\socket.h">
       <Filter>Заголовочные файлы\net</Filter>
     </ClInclude>
-    <ClInclude Include="src\tools\exception.h">
-      <Filter>Заголовочные файлы\tools</Filter>
-    </ClInclude>
     <ClInclude Include="src\tools\logger.h">
       <Filter>Заголовочные файлы\tools</Filter>
     </ClInclude>
     <ClInclude Include="src\cross\ifile.h">
       <Filter>Заголовочные файлы\cross</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\fileagent.h">
-      <Filter>Заголовочные файлы\common</Filter>
-    </ClInclude>
     <ClInclude Include="src\stdafx.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="src\cross\windows\fileimpl.h">
       <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\file.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\windows\winfile.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\exception.h">
+      <Filter>Заголовочные файлы\tools\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\exceptions\fileexception.h">
+      <Filter>Заголовочные файлы\tools\exceptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
