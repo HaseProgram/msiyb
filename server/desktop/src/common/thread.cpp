@@ -45,7 +45,7 @@ bool Thread::CheckActive()
 
 void Thread::CheckListCompleted()
 {
-	for (int i = 0; i < Thread::ThreadList.size(); i++)
+	for (size_t i = 0; i < Thread::ThreadList.size(); i++)
 	{
 		if (!Thread::ThreadList[i]->CheckCompleted())
 		{

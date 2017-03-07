@@ -8,158 +8,252 @@
 */
 
 #pragma once
-//#include "Ifile.h"
-//#include "exeption.h"
-//#include "convert.h"
-#define FILE_BUFFER_SIZE 1024
+
 #ifdef _WIN32
 #include "../cross/windows/winfile.h"
-typedef WindowsFile OsFile;
+typedef WinFile OSFile;
 #elif _unix_
-typedef UnixFile OsFile;
+typedef UnixFile OSFile;
 #include "../cross/unix/fileimpl.h"
 #endif
 
-#include <iostream>
-
-
 using namespace std;
-
-
-void ResizeStringArray(char ***arrayStrings, int *oldSize, int rCoeff)
-{
-	int newSize = *oldSize * rCoeff;
-	char **oldPtr = *arrayStrings;
-	char **newPtr = new char*[newSize];//(char**)realloc(oldPtr, newSize * sizeof(*oldPtr));
-	if (!newPtr) ThrowException("Cant resize string array");
-	memcpy(newPtr, oldPtr, *oldSize * sizeof(*newPtr));
-	delete[] oldPtr;
-	*oldSize = newSize;
-	*arrayStrings = newPtr;
-}
-
-void ResizeString(char **string, int *oldSize, int rCoeff)
-{
-	int newSize = *oldSize * rCoeff;
-	char *oldPtr = *string;
-	char *newPtr = new char[newSize];// (char*)realloc(oldPtr, newSize * sizeof(*oldPtr));
-	if (!newPtr) ThrowException("Cant resize string");
-	memcpy(newPtr, oldPtr, *oldSize * sizeof(*newPtr));
-	delete[] oldPtr;
-	*oldSize = newSize;
-	*string = newPtr;
-}
-
-void Resize(char **string, int *oldSize, int newSize)
-{
-	char *oldPtr = *string;
-	char *newPtr = new char[newSize];// (char*)realloc(oldPtr, newSize * sizeof(*oldPtr));
-	if (!newPtr) ThrowException("Cant resize string");
-	memcpy(newPtr, oldPtr, *oldSize);
-	delete[] oldPtr;
-	*oldSize = newSize;
-	*string = newPtr;
-}
-
-class File : public IFile
-{
-private:
-	IFile *file;					/*!< OS depended file structure */
-	int buffersSize;				/// size of read and write cahce buffer
-	byte *fileReadedBytesBuffer;	/// read cache buffer
-	byte *fileWritedBytesBuffer;
-	int posInReadedBuf;
-	int posInWritedBuf;
-	int readedBytes;
-	int writedBytes;
-	char fileName[MAX_PATH];
-
-	//byte buf[FILE_BUFFER_SIZE];
-
-	static int ReadStringFromBuffer(char **string, byte *buf, int *startPos, int sizeBuf);
-	// TODO:
-	inline void CheckAllocate(byte *arr);
-public:
-	File();
-	~File();
-
-	void Open(const char *fileName, FileMode mode);
-
-	void Close();
-	void Rename(const char *newFileName);
-	bool Exist();
-	void Delete();
-	inline void CheckBuffer();
-	int ReadByte();
-	unsigned long long ReadFromFile(byte *block, unsigned long long sizeBlock);
-	void WriteToFile(byte *block, unsigned long long sizeBlock);
-	void WriteByte(byte b);
-	unsigned long long Seek();
-	void Fflush();
-	unsigned long long FileSize();
-	void SetOffset(unsigned long long distance, MoveMethod move);
-
-	/*! static Methods */
-
-	/*! Read all informaion from file */
-	static int ReadAllBytes(const char *fileName, byte **byteArr);
-	static int ReadAllCharStrings(const char *fileName, char*** charStrings);
-	static int ReadAllStrings(const char *fileName, string** stringArray);
-
-	/*! Get size of file in ull format */
-	static unsigned long long FileSize(const char *fileName);
-	static void Delete(const char *fileName);
-	static bool Exist(const char *fileName);
-
-	static void WriteAllBytes(const char *fileName, byte* data, int size, FileMode mode = OpenWriteIfExist);
-	static void WriteAllCharStrings(const char *fileName, char** charStrings, int countStrings);
-	static void WriteAllStrings(const char *fileName, string *strings, int countStrings);
-
-
-	// TODO: i dont know what i need to return ...
-	static char* LastModified(const char *fileName);
-};
-
 
 /*!
 \class File file.h "server\desktop\src\common\file.h"
 \brief  File interface
-Provide interface to common file structure and it's action
+Provides interface to common file structure and it's action
 Factory for unix/bsd/windows structure of file
 */
-//class File
-//{
-//public:
-//	/*!
-//	Initialise OS depended file structure
-//	*/
-//	File();
-//
-//	/*!
-//	Initialise OS depended file structure
-//	Set full file name in File class meta structure
-//	\param[in] filename Name of file with it's local path
-//	*/
-//	File(char* filename);
-//
-//	/*!
-//	Dealocate OS depended File object
-//	*/
-//	~File();
-//
-//	/*!
-//	Opens file with defined open rule
-//	Possible values defined in /src/cross/ifile.h
-//	\param[in] mode Set the rule opening file
-//	*/
-//	void Open(FileOpenMode mode);
-//
-//	/*!
-//	Closes file
-//	*/
-//	void Close();
-//
-//private:
-//	IFile* file;	/*!< OS depended file structure */
-//
-//};
+class File
+{
+public:
+	/*!
+	Initialises cache buffers and OS depended file structure.
+	\param[in] fileName Name of file to work with.
+	\param[in] bufferSize Maximum size of cache buffer.
+	*/
+	File(const char* fileName = nullptr, size_lt bufferSize = FILE_BUFFER_SIZE);
+
+	/*!
+	Dealocates memory of cache buffers and OS depended file structure.
+	*/
+	~File();
+
+	/*!
+	Opens file in predetermined mode.
+	\param[in] mode Mode to open file (list of possibles modes defined in ifile.h).
+	*/
+	void Open(FileOpenMode mode);
+	
+	/*!
+	Flushes bytes from cache buffer to write into file.
+	Closes file descriptor.
+	*/
+	void Close();
+
+	/*!
+	Set new file name.
+	\param[in] newFileName Name to be associated to a current file.
+	*/
+	void Rename(const char *newFileName);
+
+	/*!
+	Set new file name. Static.
+	\param[in] fileName Current name of file to be replaced.
+	\param[in] newFileName Name to be associated to a current file.
+	*/
+	static void Rename(const char *fileName, const char *newFileName);
+
+	/*!
+	Checks if file exists.
+	\return TRUE if file exists, FALSE in other case.
+	*/
+	bool Exist();
+
+	/*!
+	Checks if file exists. Static.
+	\param[in] fileName Name of file to be checked.
+	\return TRUE if file exists, FALSE in other case.
+	*/
+	static bool Exist(const char *fileName);
+
+	/*!
+	Get file info.
+	\return Info about file.
+	*/
+	FileMeta GetInfo();
+
+	/*!
+	\TODO
+	Get file info. Static.
+	\param[in] string fileName Name of file to read.
+	\return Info about file.
+	*/
+	static FileMeta GetInfo(const char *fileName);
+
+	/*!
+	Deletes file.
+	*/
+	void Delete();
+
+	/*!
+	Deletes file. Static.
+	\param[in] fileName Name of file to be deleted.
+	*/
+	static void Delete(const char *fileName);
+
+	/*!
+	Checks if all data from buffer already readed and fill it with new data.
+	\return TRUE if cache filled with new data, FALSE in other case (ex. EOF).
+	*/
+	inline bool CheckCache();
+
+	/*!
+	Reads one byte from file.
+	\return Value of readed byte or -1 if can't read (ex. EOF).
+	*/
+	int ReadByte();
+
+	/*!
+	Reads block from file.
+	\param[out] block Array of bytes from file.
+	\param[in] sizeBlock Amount of bytes to be readed.
+	\return Amount of bytes were readed from file.
+	*/
+	size_lt ReadBlock(byte *block, size_lt sizeBlock);
+
+	/*!
+	Saves one byte in cache. 
+	Will be writed in file after cache fills or after Flush method called.
+	Clears cache of readed bytes.
+	\param[in] b Byte to save.
+	*/
+	void WriteByte(byte b);
+
+	/*!
+	Writes block into file.
+	Clears cache of readed bytes.
+	\param[in] block Array of bytes to be writed.
+	\param[in] blockSize Amount of bytes to be writed.
+	*/
+	void WriteBlock(byte *block, size_lt sizeBlock);
+
+	/*!
+	Writes in to file cache of writed bytes.
+	Clears cache of readed bytes.
+	*/
+	void Flush();
+
+	/*!
+	Moves the file pointer of the specified file.
+	\param[in] offset Offset of new pointer position
+	\param[in] move Position used as reference for the offset.
+	\return New pointer position
+	*/
+	size_lt Seek(size_lt offset, SeekReference move);
+
+	/*!
+	Return size of file.
+	\return Size of file.
+	*/
+	size_lt FileSize();
+
+	/*!
+	Return size of file. Static.
+	\return Size of file.
+	*/
+	static size_lt FileSize(const char *fileName);
+
+
+
+	  /////////////////////////////////////////////////////////////////////////////
+	 ////////////////////           STATIC METHODS            ////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+
+	/*!
+	Read full file. Static.
+	\param[in] fileName Name of file to read.
+	\param[out] byteArr Data readed from file.
+	\return Amount of readed bytes.
+	*/
+	static size_lt ReadAllBytes(const char *fileName, byte **byteArr);
+
+	/*!
+	Read full file and parse it on strings. Static.
+	\param[in] fileName Name of file to read.
+	\param[out] byteArr Data readed from file.
+	\return Amount of readed strings.
+	*/
+	static size_lt ReadAllCharStrings(const char *fileName, char*** charStrings);
+
+	/*!
+	Read full file and parse it on strings. Static.
+	\param[in] fileName Name of file to read.
+	\param[out] byteArr Data readed from file.
+	\return Amount of readed strings.
+	*/
+	static size_lt ReadAllStrings(const char *fileName, string** stringArray);
+
+	/*!
+	Read buffer and parse it on strings. Static.
+	\param[out] string String array from buffer.
+	\param[in] buf Buffer to read.
+	\param[in] startPos Position in buffer fom which we start read.
+	\param[in] sizeBuf Buffer size.
+	\return Amount of readed strings.
+	*/
+	static size_lt ReadStringFromBuffer(char **string, byte *buf, size_lt *startPos, size_lt sizeBuf);
+
+	/*!
+	Open file and write all data in it. Static.
+	\param[in] fileName Name of file to read.
+	\param[in] data Data to write in file.
+	\param[in] size Size of data buffer.
+	\param[in] mode Open file mode.
+	*/
+	static void WriteAllBytes(const char *fileName, byte* data, size_lt size, FileOpenMode mode = WRITEONEXISTS);
+	
+	/*!
+	Open file and write all data (in char string format) in it. Static.
+	\param[in] string fileName Name of file to read.
+	\param[in] charStrings Strings to write in file.
+	\param[in] countStrings Amount of strings to write.
+	\param[in] mode Open file mode.
+	*/ 
+	static void WriteAllCharStrings(const char *fileName, char** charStrings, size_lt countStrings, FileOpenMode mode = WRITEONEXISTS);
+	
+	/*!
+	Open file and write all data (in string format) in it. Static.
+	\param[in] string fileName Name of file to read.
+	\param[in] charStrings Strings to write in file.
+	\param[in] countStrings Amount of strings to write.
+	\param[in] mode Open file mode.
+	*/
+	static void WriteAllStrings(const char *fileName, string *strings, size_lt countStrings, FileOpenMode mode = WRITEONEXISTS);
+
+	/*!
+	\TODO
+	Get last modified file. Static.
+	\param[in] string fileName Name of file to read.
+	\return Info about last modified file.
+	*/
+	static FileMeta LastModified(const char *fileName);
+
+private:
+	IFile *file;					///< OS depended file structure 
+
+	char fileName[MAX_PATH];		///< Path to a file (including it's name)
+	bool opened;					///< Descriptor opening status
+
+	size_lt bufferSize;				///< Determine size of cache buffer
+
+	byte *cacheReaded;				///< Cache of bytes were readed from file
+	size_lt posInCacheReaded;		///< Pointer to a position in cache of readed bytes
+	size_lt bytesInCacheReaded;		///< Amount of bytes left in cache of readed bytes
+
+	byte *cacheToWrite;				///< Cache of bytes are ready to be writen in file
+	size_lt posInCacheToWrite;		///< Pointer to a position in cache of bytes to write in file
+	size_lt bytesInCacheToWrite;	///< Amount of bytes left in cache of bytes to write in file
+
+};

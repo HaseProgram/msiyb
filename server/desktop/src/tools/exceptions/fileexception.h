@@ -2,27 +2,6 @@
 
 #include "../exception.h"
 
-#ifdef DEBUG
-inline void ThrowFileException(const char *msg)
-{
-	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__);
-}
-
-inline void ThrowFileExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
-}
-#elif
-inline void ThrowFileException(const char* msg)
-{
-	throw FileException(msg);
-}
-inline void ThrowFileExceptionWithCode(const char* msg, long code)
-{
-	throw FileException(msg, code);
-}
-#endif
-
 class FileException : public Exception
 {
 	char message[1024];
@@ -62,3 +41,23 @@ public:
 	}
 };
 
+#ifdef DEBUG
+inline void ThrowFileException(const char *msg)
+{
+	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__);
+}
+
+inline void ThrowFileExceptionWithCode(const char* msg, long code)
+{
+	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
+}
+#elif
+inline void ThrowFileException(const char* msg)
+{
+	throw FileException(msg);
+}
+inline void ThrowFileExceptionWithCode(const char* msg, long code)
+{
+	throw FileException(msg, code);
+}
+#endif

@@ -11,29 +11,6 @@
 #define ERROR_MSG_SIZE 1024
 #define DEBUG
 
-
-#ifdef DEBUG
-inline void ThrowException(const char *msg)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__);
-}
-
-inline void ThrowExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
-}
-#elif
-inline void ThrowException(const char* msg)
-{
-	throw Exception(msg);
-}
-inline void ThrowExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, code);
-}
-#endif
-
-
 #ifdef _WIN32
 #include <Windows.h>
 inline const char *ParseException(int errCode)
@@ -56,8 +33,6 @@ inline const char *ParseException(int errCode)
 	return errMessage;
 }
 #endif
-
-
 
 class Exception : public std::exception
 {
@@ -109,4 +84,23 @@ public:
 	}
 };
 
+#ifdef DEBUG
+inline void ThrowException(const char *msg)
+{
+	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__);
+}
 
+inline void ThrowExceptionWithCode(const char* msg, long code)
+{
+	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
+}
+#elif
+inline void ThrowException(const char* msg)
+{
+	throw Exception(msg);
+}
+inline void ThrowExceptionWithCode(const char* msg, long code)
+{
+	throw Exception(msg, code);
+}
+#endif

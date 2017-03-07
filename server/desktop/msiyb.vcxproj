@@ -19,23 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\common\stringmethods.cpp" />
     <ClCompile Include="src\common\dir.cpp" />
     <ClCompile Include="src\common\file.cpp" />
     <ClCompile Include="src\common\thread.cpp" />
-    <ClCompile Include="src\cross\windows\fileimpl.cpp" />
+    <ClCompile Include="src\cross\windows\winfile.cpp" />
     <ClCompile Include="src\cross\windows\winthread.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\server.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\common\stringmethods.h" />
     <ClInclude Include="src\common\dir.h" />
     <ClInclude Include="src\common\file.h" />
     <ClInclude Include="src\common\thread.h" />
     <ClInclude Include="src\cross\idir.h" />
     <ClInclude Include="src\cross\ifile.h" />
     <ClInclude Include="src\cross\ithread.h" />
-    <ClInclude Include="src\cross\windows\fileimpl.h" />
     <ClInclude Include="src\cross\windows\windir.h" />
     <ClInclude Include="src\cross\windows\winthread.h" />
     <ClInclude Include="src\cross\windows\winfile.h" />
@@ -102,16 +103,16 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <SDLCheck>false</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,7 +121,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -133,7 +134,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

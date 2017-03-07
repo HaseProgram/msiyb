@@ -2,27 +2,6 @@
 
 #include "../exception.h"
 
-#ifdef DEBUG
-inline void ThrowThreadException(const char *msg)
-{
-	throw ThreadException(msg, __FILE__, __FUNCTION__, __LINE__);
-}
-
-inline void ThrowThreadExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
-}
-#elif
-inline void ThrowThreadException(const char* msg)
-{
-	throw ThreadException(msg);
-}
-inline void ThrowThreadExceptionWithCode(const char* msg, long code)
-{
-	throw ThreadException(msg, code);
-}
-#endif
-
 class ThreadException : public Exception
 {
 	char message[1024];
@@ -62,3 +41,23 @@ public:
 	}
 };
 
+#ifdef DEBUG
+inline void ThrowThreadException(const char *msg)
+{
+	throw ThreadException(msg, __FILE__, __FUNCTION__, __LINE__);
+}
+
+inline void ThrowThreadExceptionWithCode(const char* msg, long code)
+{
+	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
+}
+#elif
+inline void ThrowThreadException(const char* msg)
+{
+	throw ThreadException(msg);
+}
+inline void ThrowThreadExceptionWithCode(const char* msg, long code)
+{
+	throw ThreadException(msg, code);
+}
+#endif
