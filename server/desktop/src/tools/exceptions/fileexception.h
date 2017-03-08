@@ -1,23 +1,25 @@
-#include "exception.h"
+#pragma once
+
+#include "../exception.h"
 
 #ifdef DEBUG
-inline void ThrowFileException(const char *msg)
-{
-	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__);
+#define ThrowFileException(msg)											\
+{																		\
+	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__);			\
 }
 
-inline void ThrowFileExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
+#define ThrowFileExceptionWithCode(msg, code)							\
+{																		\
+	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__, code);	\
 }
-#elif
-inline void ThrowFileException(const char* msg)
-{
-	throw FileException(msg);
-}
-inline void ThrowExceptionWithCode(const char* msg, long code)
-{
-	throw FileException(msg, code);
+#else
+#define ThrowFileException(msg)											\
+{																		\
+	throw FileException(msg);											\
+}																	
+#define void ThrowFileExceptionWithCode(msg, code)						\
+{																		\
+	throw FileException(msg, code);										\
 }
 #endif
 
@@ -28,18 +30,24 @@ class FileException : public Exception
 public:
 	FileException(const char* message, const char *file, const char *function, int line, long errCode)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occoured.\n Error message:\n %s\n Error code: %d", file, function, line, message, errCode);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n Error code: %d\n", file, function, line, message, errCode);
 		this->errCode = errCode;
 	}
 
-	const char* Message() const
+	FileException(const char* message, const char *file, const char *function, int line)
+	{
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n", file, function, line, message);
+		this->errCode = -1;
+	}
+
+	const char* what() const
 	{
 		return message;
 	}
 
 	void operator = (const FileException &fE)
 	{
-		strcpy(message, fE.Message());
+		strcpy(message, fE.what());
 		errCode = fE.GetErrorCode();
 	}
 
@@ -53,4 +61,3 @@ public:
 		this->errCode = errCode;
 	}
 };
-

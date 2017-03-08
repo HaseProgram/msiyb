@@ -1,5 +1,6 @@
 #pragma once
 #include <exception>
+#include "../stdafx.h"
 
 #ifdef _WIN32 
 #define LastError GetLastError()
@@ -10,31 +11,29 @@
 #define ERROR_MSG_SIZE 1024
 #define DEBUG
 
+#ifdef _WIN32
 
 #ifdef DEBUG
-inline void ThrowException(const char *msg)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__);
+#define ThrowException(msg)											\
+{																	\
+	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__);			\
 }
 
-inline void ThrowExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
+#define ThrowExceptionWithCode(msg, code)							\
+{																	\
+	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);	\
 }
-#elif
-inline void ThrowException(const char* msg)
-{
-	throw Exception(msg);
-}
-inline void ThrowExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, code);
+#else
+#define ThrowException(msg)											\
+{																	\
+	throw Exception(msg);											\
+}																	
+#define void ThrowExceptionWithCode(msg, code)						\
+{																	\
+	throw Exception(msg, code);										\
 }
 #endif
 
-
-#ifdef _WIN32
-#include <Windows.h>
 inline const char *ParseException(int errCode)
 {
 	char *errMessage = new char[1024];
@@ -56,8 +55,6 @@ inline const char *ParseException(int errCode)
 }
 #endif
 
-
-
 class Exception : public std::exception
 {
 public:
@@ -75,14 +72,14 @@ public:
 
 	Exception(const char* message, const  char* file, const char* function, int line, long errCode)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occoured.\n Error message:\n %s\n Error code:", file, function, line, message, errCode);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n Error code: %d\n", file, function, line, message, errCode);
 		this->errCode = errCode;
 	}
 
 
 	Exception(const char* message, const char* file, const char* function, int line)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occoured.\n Error message:\n %s\n", file, function, line, message);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n", file, function, line, message);
 		this->errCode = errCode;
 	}
 
@@ -107,5 +104,3 @@ public:
 		return this->message;
 	}
 };
-
-
