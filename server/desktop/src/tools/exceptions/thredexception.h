@@ -2,6 +2,27 @@
 
 #include "../exception.h"
 
+#ifdef DEBUG
+#define ThrowThreadException(msg)											\
+{																			\
+	throw ThreadException(msg, __FILE__, __FUNCTION__, __LINE__);			\
+}
+
+#define ThrowThreadExceptionWithCode(msg, code)								\
+{																			\
+	throw ThreadException(msg, __FILE__, __FUNCTION__, __LINE__, code);		\
+}
+#else
+#define ThrowThreadException(msg)											\
+{																			\
+	throw ThreadException(msg);												\
+}																	
+#define void ThrowThreadExceptionWithCode(msg, code)						\
+{																			\
+	throw ThreadException(msg, code);										\
+}
+#endif
+
 class ThreadException : public Exception
 {
 	char message[1024];
@@ -9,13 +30,13 @@ class ThreadException : public Exception
 public:
 	ThreadException(const char* message, const char *file, const char *function, int line, long errCode)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message:\n %s\n Error code: %d", file, function, line, message, errCode);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n Error code: %\n", file, function, line, message, errCode);
 		this->errCode = errCode;
 	}
 
 	ThreadException(const char* message, const char *file, const char *function, int line)
 	{
-		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message:\n %s", file, function, line, message);
+		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n", file, function, line, message);
 		this->errCode = -1;
 	}
 
@@ -40,24 +61,3 @@ public:
 		this->errCode = errCode;
 	}
 };
-
-#ifdef DEBUG
-inline void ThrowThreadException(const char *msg)
-{
-	throw ThreadException(msg, __FILE__, __FUNCTION__, __LINE__);
-}
-
-inline void ThrowThreadExceptionWithCode(const char* msg, long code)
-{
-	throw Exception(msg, __FILE__, __FUNCTION__, __LINE__, code);
-}
-#elif
-inline void ThrowThreadException(const char* msg)
-{
-	throw ThreadException(msg);
-}
-inline void ThrowThreadExceptionWithCode(const char* msg, long code)
-{
-	throw ThreadException(msg, code);
-}
-#endif

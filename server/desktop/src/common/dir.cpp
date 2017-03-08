@@ -17,7 +17,7 @@ Dir::Dir(const char* path)
 Dir::~Dir()
 {
 	delete this->dir;
-	delete[] workingDir;
+	delete[] this->workingDir;
 }
 
 void Dir::SetWorkingDir(const char* path)

@@ -77,7 +77,7 @@ HANDLE WinFile::Open(const char *fileName, FileOpenMode mode)
 
 	if (hfile == INVALID_HANDLE_VALUE)
 	{
-		ThrowExceptionWithCode("Error occured while opening file.", GetLastError());
+		ThrowFileExceptionWithCode("Error occured while opening file.", GetLastError());
 	}
 	return hfile;
 }

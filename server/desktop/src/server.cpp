@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "server.h"
+#include "common\file.h"
 
 Server::Server()
 {
@@ -18,6 +19,9 @@ void Server::Start()
 		Bind and start listen
 	*/
 
+	File* testFile = new File("F:\\save.txt");
+	testFile->Open(FileOpenMode::READONLY);
+	testFile->Close();
 
 	while (1)
 	{
