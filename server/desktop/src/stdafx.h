@@ -9,6 +9,7 @@ typedef unsigned long long size_lt;
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "string.h"
 
 #include <stdlib.h>
