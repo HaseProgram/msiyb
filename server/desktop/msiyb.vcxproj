@@ -23,22 +23,28 @@
     <ClCompile Include="src\common\dir.cpp" />
     <ClCompile Include="src\common\file.cpp" />
     <ClCompile Include="src\common\thread.cpp" />
+    <ClCompile Include="src\cross\unix\unixsocket.cpp" />
     <ClCompile Include="src\cross\windows\winfile.cpp" />
+    <ClCompile Include="src\cross\windows\winsocket.cpp" />
     <ClCompile Include="src\cross\windows\winthread.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\net\socket.cpp" />
     <ClCompile Include="src\server.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="socketexception.h" />
     <ClInclude Include="src\common\stringmethods.h" />
     <ClInclude Include="src\common\dir.h" />
     <ClInclude Include="src\common\file.h" />
     <ClInclude Include="src\common\thread.h" />
     <ClInclude Include="src\cross\idir.h" />
     <ClInclude Include="src\cross\ifile.h" />
+    <ClInclude Include="src\cross\isocket.h" />
     <ClInclude Include="src\cross\ithread.h" />
+    <ClInclude Include="src\cross\unix\unixfile.h" />
+    <ClInclude Include="src\cross\unix\unixsocket.h" />
     <ClInclude Include="src\cross\windows\windir.h" />
+    <ClInclude Include="src\cross\windows\winsocket.h" />
     <ClInclude Include="src\cross\windows\winthread.h" />
     <ClInclude Include="src\cross\windows\winfile.h" />
     <ClInclude Include="src\main.h" />
@@ -47,13 +53,14 @@
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\tools\exception.h" />
     <ClInclude Include="src\tools\exceptions\fileexception.h" />
+    <ClInclude Include="src\tools\exceptions\socketexception.h" />
     <ClInclude Include="src\tools\exceptions\thredexception.h" />
     <ClInclude Include="src\tools\logger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D98F9A90-BA3A-404A-82AF-0E06ED83E95F}</ProjectGuid>
     <RootNamespace>msiyb</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

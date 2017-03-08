@@ -45,7 +45,7 @@ public:
 		return message;
 	}
 
-	void operator = (const FileException &fE)
+	void operator = (const SocketException &fE)
 	{
 		strcpy(message, fE.what());
 		errCode = fE.GetErrorCode();

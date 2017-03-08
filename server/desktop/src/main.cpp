@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "main.h"
 #include "common\file.h"
-
 using namespace std;
 
 int main()

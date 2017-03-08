@@ -63,6 +63,15 @@
     <ClCompile Include="src\cross\windows\winfile.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="src\net\socket.cpp">
+      <Filter>Заголовочные файлы\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cross\unix\unixsocket.cpp">
+      <Filter>Заголовочные файлы\cross\unix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cross\windows\winsocket.cpp">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main.h">
@@ -119,8 +128,20 @@
     <ClInclude Include="src\cross\ithread.h">
       <Filter>Заголовочные файлы\cross</Filter>
     </ClInclude>
-    <ClInclude Include="socketexception.h">
+    <ClInclude Include="src\cross\windows\winsocket.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\exceptions\socketexception.h">
       <Filter>Заголовочные файлы\tools\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\unix\unixfile.h">
+      <Filter>Заголовочные файлы\cross\unix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\unix\unixsocket.h">
+      <Filter>Заголовочные файлы\cross\unix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cross\isocket.h">
+      <Filter>Заголовочные файлы\cross</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
