@@ -1,39 +1,40 @@
 #pragma once
 
 #include "../exception.h"
+
 #ifdef DEBUG
-#define ThrowFileException(msg)											\
+#define ThrowSocketException(msg)											\
 {																		\
-	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__);			\
+	throw SocketException(msg, __FILE__, __FUNCTION__, __LINE__);			\
 }
 
-#define ThrowFileExceptionWithCode(msg, code)							\
+#define ThrowSocketExceptionWithCode(msg, code)							\
 {																		\
-	throw FileException(msg, __FILE__, __FUNCTION__, __LINE__, code);	\
+	throw SocketException(msg, __FILE__, __FUNCTION__, __LINE__, code);	\
 }
 #else
-#define ThrowFileException(msg)											\
+#define ThrowSocketException(msg)										\
 {																		\
-	throw FileException(msg);											\
+	throw SocketException(msg);											\
 }																	
-#define void ThrowFileExceptionWithCode(msg, code)						\
+#define void ThrowSocketExceptionWithCode(msg, code)					\
 {																		\
-	throw FileException(msg, code);										\
+	throw SocketException(msg, code);										\
 }
 #endif
 
-class FileException : public Exception
+class SocketException : public Exception
 {
 	char message[1024];
 	long errCode;
 public:
-	FileException(const char* message, const char *file, const char *function, int line, long errCode)
+	SocketException(const char* message, const char *file, const char *function, int line, long errCode)
 	{
 		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n Error code: %d\n", file, function, line, message, errCode);
 		this->errCode = errCode;
 	}
 
-	FileException(const char* message, const char *file, const char *function, int line)
+	SocketException(const char* message, const char *file, const char *function, int line)
 	{
 		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n", file, function, line, message);
 		this->errCode = -1;

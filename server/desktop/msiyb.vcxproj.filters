@@ -119,5 +119,8 @@
     <ClInclude Include="src\cross\ithread.h">
       <Filter>Заголовочные файлы\cross</Filter>
     </ClInclude>
+    <ClInclude Include="socketexception.h">
+      <Filter>Заголовочные файлы\tools\exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
