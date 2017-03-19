@@ -5,62 +5,100 @@
 Dir::Dir()
 {
 	this->dir = new OSDir();
+	if(!this->dir)
+	{
+		ThrowException("Can't allocate memory!");
+	}
 	strcpy(this->workingDir, "/");
 }
 
-Dir::Dir(const char* path)
+Dir::Dir(const char *path)
 {
-	this->dir = new OSDir();
+	this->dir = new OSDir(path);
+	if(!this->dir)
+	{
+		ThrowException("Can't allocate memory!");
+	}
 	strcpy(this->workingDir, path);
 }
 
 Dir::~Dir()
 {
 	delete this->dir;
-	delete[] this->workingDir;
+	delete[] &this->workingDir;
 }
 
-void Dir::SetWorkingDir(const char* path)
+void Dir::SetWorkingDir(const char *path)
 {
 	strcpy(this->workingDir, path);
 }
 
-long long Dir::GetDirSize()
+size_lt Dir::GetDirSize()
 {
-	return 123414134124;
+	return this->GetDirSize(this->workingDir);
 }
 
-long long Dir::GetNumberOfFIles()
+size_lt Dir::GetDirSize(const char *path)
 {
-	return 3141241241234;
+	return OSDir::GetDirSize(path);
 }
 
-File& Dir::SearchFileName(const char* filename)
+size_lt Dir::GetNumberOfFiles()
 {
-	return File();
+	return this->GetNumberOfFiles(this->workingDir);
 }
 
-//vector<File&> Dir::SearchFileExtention(const char * filextention)
-//{
-//	return vector<File&>();
-//}
-//
-//vector<File&> Dir::SearchFileDate(time_t filedate)
-//{
-//	return vector<File&>();
-//}
-
-void Dir::MakeDir(const char * path)
+size_lt Dir::GetNumberOfFiles(const char *path)
 {
+	return OSDir::GetNumberOfFiles(path);
 }
 
-bool Dir::DirExists(const char * path)
+File& Dir::SearchFileName(const char *fileName)
 {
-	return false;
+	return this->SearchFileName(this->workingDir, fileName);
 }
 
-bool Dir::IsDir(const char * path)
+File& Dir::SearchFileName(const char *path, const char *fileName)
 {
-	return false;
+	return OSDir::SearchFileName(path, fileName);
 }
 
+vector<File&> Dir::SearchFileExt(const char * filextention)
+{
+	return this->SearchFileExt(this->workingDir, filextention);
+}
+
+vector<File&> Dir::SearchFileExt(const char *path, const char *fileExtention)
+{
+	return OSDir::SearchFileExt(path, fileExtention);
+}
+
+vector<File&> Dir::SearchFileTime(time_t fileTime)
+{
+	return this->SearchFileTime(this->workingDir, fileTime);
+}
+
+vector<File&> Dir::SearchFileTime(const char * path, time_t fileTime)
+{
+	return OSDir::SearchFileTime(path, fileTime);
+}
+
+void Dir::MakeDir()
+{
+	this->MakeDir(this->workingDir);
+}
+
+void Dir::MakeDir(const char *path)
+{
+	OSDir::MakeDir(path);
+}
+
+bool Dir::Exists()
+{
+	this->Exists(this->workingDir);
+}
+
+bool Dir::Exists(const char *path)
+{
+	return OSDir::Exists(path);
+}

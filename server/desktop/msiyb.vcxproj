@@ -23,6 +23,7 @@
     <ClCompile Include="src\common\dir.cpp" />
     <ClCompile Include="src\common\file.cpp" />
     <ClCompile Include="src\common\thread.cpp" />
+    <ClCompile Include="src\cross\windows\windir.cpp" />
     <ClCompile Include="src\cross\windows\winfile.cpp" />
     <ClCompile Include="src\cross\windows\winthread.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="src\server.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\tools\exception.h" />
+    <ClInclude Include="src\tools\exceptions\direxception.h" />
     <ClInclude Include="src\tools\exceptions\fileexception.h" />
     <ClInclude Include="src\tools\exceptions\thredexception.h" />
     <ClInclude Include="src\tools\logger.h" />

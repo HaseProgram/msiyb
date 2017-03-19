@@ -1,6 +1,6 @@
 /*!
 \file thread.h "server\desktop\src\common\thread.h"
-\authors Alexandr Barulev, Dmitry Zaitsev
+\authors Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
 \version 0.1
@@ -8,6 +8,7 @@
 */
 
 #pragma once
+#define MAX_INT 2147483646
 
 #ifdef _WIN32
 #include "../cross/windows/winthread.h"
@@ -29,9 +30,12 @@ class Thread
 {
 public:
 	static int activeThreadsCount;		///< Amount of current active threads
+	static int threadLID;				///< Last started thread ID
 	static vector<Thread*> ThreadList;	///< List of current thread objects
 
-	bool runned;	///< TRUE if we started thread; false if not yet
+	int threadID;						///< Current thread local ID
+	bool runned;		///< TRUE if we started thread; false if not yet
+	void *result;		///< Value returned from thread function
 
 	/*!
 	Initialises OS depended thread structure.
@@ -50,9 +54,10 @@ public:
 	equal to max thread count, looks for completed threads and tried one more time.
 	\param[in] threadFunc Pointer to a function to be executed by the thread.
 	\param[in] threadFuncArgs A pointer to a variable to be passed to the thread.
-	\return TRUE if new thread started, NO in other case.
+	\param[out] result Value returned from thread function.
+	\return Thread ID if new thread started, -1 in other case.
 	*/
-	bool Start(void* threadFunc, void* threadFuncArgs);
+	int Start(void *threadFunc, void *threadFuncArgs, void *result = nullptr);
 
 	/*!
 	Checks if current thread started and completed it's work
@@ -71,9 +76,16 @@ public:
 	*/
 	static void CheckListCompleted();
 
+	/*!
+	Looks for thread completed and if so - delete it from thread list.
+	\param[in] ID Id of thread to check.
+	*/
+	static void CheckThreadCompleted(int ID);
+
 private:
 	IThread* thread;	///< OS depended thread structure
 };
 
 int Thread::activeThreadsCount = 0;
+int Thread::threadLID = -1;
 vector<Thread*> Thread::ThreadList;

@@ -1,6 +1,6 @@
 /*!
 \file ithread.h "server\desktop\src\cross\ithread.h"
-\authors Alexandr Barulev, Dmitry Zaitsev
+\authors Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
 \version 0.1
@@ -63,7 +63,8 @@ public:
 
 	/*!
 	Check if thread comleted his work.
+	\param[out] result Value returned from thread function.
 	\return TRUE if still active and FASLE in other case
 	*/
-	virtual bool CheckActive() = 0;
+	virtual bool CheckActive(void *result = nullptr) = 0;
 };

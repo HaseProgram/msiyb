@@ -69,12 +69,13 @@ long WinThread::GetThreadID()
 	return this->threadID;
 }
 
-bool WinThread::CheckActive()
+bool WinThread::CheckActive(void *result)
 {
-	int status = GetExitCodeThread(this->hThread, this->exitCode);
-	if (status == 0)
+	this->status = GetExitCodeThread(this->hThread, this->exitCode);
+	result = this->exitCode;
+	if (this->status == 0)
 	{
 		ThrowThreadExceptionWithCode("Can not check thread status!", GetLastError());
 	}
-	return (status == STILL_ACTIVE);
+	return (this->status == STILL_ACTIVE);
 }

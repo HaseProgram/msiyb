@@ -1,5 +1,4 @@
 #pragma once
-#include "file.h"
 
 #ifdef _WIN32
 #include "../cross/windows/windir.h"
@@ -20,15 +19,28 @@ public:
 	Dir(const char* path);
 	~Dir();
 
-	void SetWorkingDir(const char* path);
-	long long GetDirSize();
-	long long GetNumberOfFIles();
-	File& SearchFileName(const char* filename);
-	//vector<File&> SearchFileExtention(const char* filextention);
-	//vector<File&> SearchFileDate(time_t filedate);
-	static void MakeDir(const char* path);
-	static bool DirExists(const char* path);
-	static bool IsDir(const char* path);
+	void SetWorkingDir(const char *path);
+
+	size_lt GetDirSize();
+	size_lt static GetDirSize(const char *path);
+
+	size_lt GetNumberOfFiles();
+	static size_lt GetNumberOfFiles(const char *path);
+
+	File& SearchFileName(const char *fileName);
+	static File& SearchFileName(const char *path, const char *fileName);
+
+	vector<File&> SearchFileExt(const char* fileExtention);
+	static vector<File&> SearchFileExt(const char *path, const char* fileExtention);
+	
+	vector<File&> SearchFileTime(time_t fileTime);
+	static vector<File&> SearchFileTime(const char *path, time_t fileTime);
+
+	void MakeDir();
+	static void MakeDir(const char *path);
+
+	bool Exists();
+	static bool Exists(const char *path);
 
 private:
 	IDir* dir;

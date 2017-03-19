@@ -1,9 +1,9 @@
 /*!
 \file winthread.h "server\desktop\src\cross\windows\winthread.h"
-\authors Alexandr Barulev, Dmitry Zaitsev
+\authors Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
-\version 0.1
+\version 0.2
 \date 02 March 2017
 */
 
@@ -21,6 +21,8 @@ Provides windows-specified access to thread creation (and handle it).
 class WinThread : public IThread
 {
 public:
+	int status;	///< Thread status. Zero value if checking exit status fails, non-zero in other case.
+
 	/*!
 	Determine amound of logical proccesses in system.
 	Depended on logical processes determine maximum amound of threads.
@@ -66,9 +68,10 @@ public:
 
 	/*!
 	Check if thread comleted his work.
+	\param[out] result Value returned from thread function.
 	\return TRUE if still active and FALSE in other case
 	*/
-	virtual bool CheckActive() override;
+	virtual bool CheckActive(void *result = nullptr) override;
 
 private:
 	HANDLE hThread;	///< Handle to the new thread.

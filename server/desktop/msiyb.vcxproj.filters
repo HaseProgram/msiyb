@@ -25,9 +25,6 @@
     <Filter Include="Заголовочные файлы\cross\windows">
       <UniqueIdentifier>{2811d904-5d6f-4a86-9cdf-083f457f9622}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\cross\unix">
-      <UniqueIdentifier>{13ee331e-7fbc-4680-bbe6-d0b46f4032b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Заголовочные файлы\common">
       <UniqueIdentifier>{85bd9b05-eb1e-4a8e-b151-821f769293bb}</UniqueIdentifier>
     </Filter>
@@ -57,10 +54,13 @@
     <ClCompile Include="src\common\thread.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\stringmethods.cpp">
-      <Filter>Заголовочные файлы\common</Filter>
-    </ClCompile>
     <ClCompile Include="src\cross\windows\winfile.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\stringmethods.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cross\windows\windir.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="src\cross\ithread.h">
       <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\exceptions\direxception.h">
+      <Filter>Заголовочные файлы\tools\exceptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
