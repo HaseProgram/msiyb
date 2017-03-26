@@ -3,21 +3,7 @@
 
 Thread::Thread()
 {
-	this->thread = new OSThread;
-	if (!this->thread)
-	{
-		ThrowException("Can't allocate memory!");
-	}
-	this->threadCount = 0;
-	if (this->threadLastGroupID < MAX_INT)
-	{
-		this->threadLastGroupID++;
-	}
-	else
-	{
-		this->threadLastGroupID = 0;
-	}
-	this->threadGroupID = this->threadLastGroupID;
+	
 }
 
 Thread::~Thread()
@@ -27,84 +13,87 @@ Thread::~Thread()
 
 int Thread::Start(void *threadFunc, void *threadFuncArgs, void *result)
 {
-	if (this->ThreadList.size() >= this->thread->GetMaxThreadCount())
-	{
-		this->CheckListCompleted();
-		if (this->ThreadList.size() >= this->thread->GetMaxThreadCount())
-		{
-			ThrowThreadException("Can't start new thread. Amount of launched threads is max!");
-		}
-	}
-
 	ThreadInfo* thrInfo = new ThreadInfo;
 	if (!thrInfo)
 	{
 		ThrowThreadExceptionWithCode("Can't allocate memory for thread info structure!", GetLastError());
 	}
 
-	thrInfo->threadID = this->threadCount;
-	if (this->threadCount < MAX_INT)
+	if (this->threadList.size() >= OSThread::GetMaxThreadCount())
 	{
-		this->threadCount++;
+		this->CheckListCompleted();
+		if (this->threadList.size() >= OSThread::GetMaxThreadCount())
+		{
+			ThrowThreadException("Can't start new thread. Amount of launched threads is max!");
+		}
 	}
-	else
+
+	this->threadList.push_back(thrInfo);
+
+	thrInfo->threadID = this->lastThreadID++;
+
+	thrInfo->threadPoolPtr = new OSThread;
+	if (!thrInfo->threadPoolPtr)
 	{
-		this->threadCount = 0;
+		ThrowException("Can't allocate memory!");
 	}
 	thrInfo->result = result;
 	thrInfo->thr = this;
-	this->ThreadList.push_back(thrInfo);
 
-	this->thread->Init(thrInfo->threadID, threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
-	this->thread->Start(thrInfo->threadID);
+	thrInfo->threadPoolPtr->Init(threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
+	thrInfo->threadPoolPtr->Start();
 
 	return thrInfo->threadID;
 }
 
 bool Thread::IsCompleted(int threadID)
 {
-	for (size_t i = 0; i < this->ThreadList.size(); i++)
+	for (size_t i = 0; i < this->threadList.size(); i++)
 	{
-		if (!this->ThreadList[i])
+		if (!this->threadList[i])
 		{
-			this->ThreadList.erase(this->ThreadList.begin() + i);
+			this->threadList.erase(this->threadList.begin() + i);
 		}
-		if ((this->ThreadList[i]->thr->threadGroupID == this->threadGroupID) && (this->ThreadList[i]->threadID = threadID))
+		if ((this->threadList[i]->threadID = threadID))
 		{
-			return (!this->thread->CheckActive(threadID, this->ThreadList[i]->result));
+			return (!this->threadList[i]->threadPoolPtr->CheckActive(this->threadList[i]->result));
 		}
 	}
 }
 
 void Thread::CheckListCompleted()
 {
-	for (size_t i = 0; i < Thread::ThreadList.size(); i++)
+	for (size_t i = 0; i < Thread::threadList.size(); i++)
 	{
-		if (!Thread::ThreadList[i])
+		if (!Thread::threadList[i])
 		{
-			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
+			Thread::threadList.erase(Thread::threadList.begin() + i);
 		}
-		if (Thread::ThreadList[i]->thr->IsCompleted(Thread::ThreadList[i]->threadID))
+		if (Thread::threadList[i]->thr->IsCompleted(Thread::threadList[i]->threadID))
 		{
-			delete Thread::ThreadList[i];
-			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
+			delete Thread::threadList[i]->threadPoolPtr;
+			delete Thread::threadList[i]->thr;
+			delete Thread::threadList[i];
+			Thread::threadList.erase(Thread::threadList.begin() + i);
 		}
 	}
 }
 
-void Thread::CheckThreadCompleted(int groupID, int threadID)
+void Thread::CheckThreadCompleted(int threadID)
 {
-	for (size_t i = 0; i < Thread::ThreadList.size(); i++)
+	for (size_t i = 0; i < Thread::threadList.size(); i++)
 	{
-		if (!Thread::ThreadList[i])
+		if (!Thread::threadList[i])
 		{
-			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
+			Thread::threadList.erase(Thread::threadList.begin() + i);
 			return;
 		}
-		if (Thread::ThreadList[i]->threadID == threadID && Thread::ThreadList[i]->thr->IsCompleted(Thread::ThreadList[i]->threadID))
+		if (Thread::threadList[i]->threadID == threadID && Thread::threadList[i]->thr->IsCompleted(Thread::threadList[i]->threadID))
 		{
-			delete Thread::ThreadList[i];
-			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
+			delete Thread::threadList[i]->threadPoolPtr;
+			delete Thread::threadList[i]->thr;
+			delete Thread::threadList[i];
+			Thread::threadList.erase(Thread::threadList.begin() + i);
 			return;
 		}
 	}

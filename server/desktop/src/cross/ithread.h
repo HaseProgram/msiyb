@@ -32,13 +32,7 @@ Defined methods for threads should be realized in OS depended classes
 class IThread
 {
 public:
-	int maxThreadsCount;	///< Amount of threads can be launched (logical proc)
-	
-	/*!
-	Returns maximum amount of threads can be launched
-	\return Maximum amount of threads can be launched
-	*/
-	virtual int GetMaxThreadCount() = 0;
+	int threadID; /// Local thread ID.
 
 	/*!
 	Set up thread before launch
@@ -48,25 +42,25 @@ public:
 	\param[in] threadFlags The flags that control the creation of the thread
 	\param[in] threadSecurityAttributes Determines if returned handle can be inherited by child.
 	*/
-	virtual void Init(int threadID, void* threadFunc, void* threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes) = 0;
+	virtual void Init(void* threadFunc, void* threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes) = 0;
 	
 	/*!
 	Launch thread with setted parameters.
 	\param[in] threadID ID of thread to launch.
 	*/
-	virtual void Start(int threadID) = 0;
+	virtual void Start() = 0;
 
 	/*!
 	Returns launched thread system ID.
 	\param[in] Local thread ID.
 	\return Launched thread system ID.
 	*/
-	virtual long GetThreadID(int threadID) = 0;
+	virtual long GetThreadID() = 0;
 
 	/*!
 	Check if thread comleted his work.
 	\param[out] result Value returned from thread function.
 	\return TRUE if still active and FASLE in other case
 	*/
-	virtual bool CheckActive(int threadID, void *result = nullptr) = 0;
+	virtual bool CheckActive(void *result = nullptr) = 0;
 };

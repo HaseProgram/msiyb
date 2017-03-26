@@ -24,9 +24,10 @@ class Thread;
 /// Single thread info
 typedef struct
 {
-	int threadID;		///< Current thread local ID.
-	void *result;		///< Value returned from thread function.
-	Thread *thr;		///< Thread object.
+	int threadID;				///< Current thread local ID.
+	OSThread *threadPoolPtr;	///< Thread ptr in pool.
+	void *result;				///< Value returned from thread function.
+	Thread *thr;				///< Thread object.
 } ThreadInfo;
 
 /*!
@@ -38,8 +39,8 @@ Factory for unix/bsd/windows structure of thread.
 class Thread
 {
 public:
-	static int threadLastGroupID;			///< ID of last allocated object
-	static vector<ThreadInfo*> ThreadList;	///< List of launched threads
+	static int lastThreadID;			///< ID of last thread
+	static vector<ThreadInfo*> threadList;	///< List of launched threads
 
 	int threadGroupID;						///< ID of this object.
 	int threadCount;						///< Amount of threads were launched from this object
@@ -81,11 +82,8 @@ public:
 	Looks if thread completed and deletes it from thread list.
 	\param[in] ID Id of thread to check.
 	*/
-	static void CheckThreadCompleted(int groupID, int threadID);
-
-private:
-	IThread* thread;	///< OS depended thread structure
+	static void CheckThreadCompleted(int threadID);
 };
 
-int Thread::threadLastGroupID = -1;
-vector<ThreadInfo*> Thread::ThreadList;
+int Thread::lastThreadID = -1;
+vector<ThreadInfo*> Thread::threadList;
