@@ -13,7 +13,7 @@ Thread::~Thread()
 
 int Thread::Start(void *threadFunc, void *threadFuncArgs, void *result)
 {
-	ThreadInfo* thrInfo = new ThreadInfo;
+	ThreadData* thrInfo = new ThreadData;
 	if (!thrInfo)
 	{
 		ThrowThreadExceptionWithCode("Can't allocate memory for thread info structure!", GetLastError());
@@ -32,16 +32,16 @@ int Thread::Start(void *threadFunc, void *threadFuncArgs, void *result)
 
 	thrInfo->threadID = this->lastThreadID++;
 
-	thrInfo->threadPoolPtr = new OSThread;
-	if (!thrInfo->threadPoolPtr)
+	thrInfo->threadOSPtr = new OSThread;
+	if (!thrInfo->threadOSPtr)
 	{
 		ThrowException("Can't allocate memory!");
 	}
 	thrInfo->result = result;
 	thrInfo->thr = this;
 
-	thrInfo->threadPoolPtr->Init(threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
-	thrInfo->threadPoolPtr->Start();
+	thrInfo->threadOSPtr->Init(threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
+	thrInfo->threadOSPtr->Start();
 
 	return thrInfo->threadID;
 }
@@ -56,7 +56,7 @@ bool Thread::IsCompleted(int threadID)
 		}
 		if ((this->threadList[i]->threadID = threadID))
 		{
-			return (!this->threadList[i]->threadPoolPtr->CheckActive(this->threadList[i]->result));
+			return (!this->threadList[i]->threadOSPtr->CheckActive(this->threadList[i]->result));
 		}
 	}
 }
@@ -71,7 +71,7 @@ void Thread::CheckListCompleted()
 		}
 		if (Thread::threadList[i]->thr->IsCompleted(Thread::threadList[i]->threadID))
 		{
-			delete Thread::threadList[i]->threadPoolPtr;
+			delete Thread::threadList[i]->threadOSPtr;
 			delete Thread::threadList[i]->thr;
 			delete Thread::threadList[i];
 			Thread::threadList.erase(Thread::threadList.begin() + i);
@@ -90,7 +90,7 @@ void Thread::CheckThreadCompleted(int threadID)
 		}
 		if (Thread::threadList[i]->threadID == threadID && Thread::threadList[i]->thr->IsCompleted(Thread::threadList[i]->threadID))
 		{
-			delete Thread::threadList[i]->threadPoolPtr;
+			delete Thread::threadList[i]->threadOSPtr;
 			delete Thread::threadList[i]->thr;
 			delete Thread::threadList[i];
 			Thread::threadList.erase(Thread::threadList.begin() + i);

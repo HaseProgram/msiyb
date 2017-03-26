@@ -25,10 +25,10 @@ class Thread;
 typedef struct
 {
 	int threadID;				///< Current thread local ID.
-	OSThread *threadPoolPtr;	///< Thread ptr in pool.
+	OSThread *threadOSPtr;		///< Thread ptr on OS implementation.
 	void *result;				///< Value returned from thread function.
 	Thread *thr;				///< Thread object.
-} ThreadInfo;
+} ThreadData;
 
 /*!
 \class Thread thread.h "server\desktop\src\common\thread.h"
