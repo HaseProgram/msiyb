@@ -3,7 +3,7 @@
 \authors Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
-\version 0.1
+\version 1.0
 \date 02 March 2017
 */
 
@@ -19,6 +19,15 @@ typedef UnixThread OSThread;
 #endif
 
 using namespace std;
+class Thread;
+
+/// Single thread info
+typedef struct
+{
+	int threadID;		///< Current thread local ID.
+	void *result;		///< Value returned from thread function.
+	Thread *thr;		///< Thread object.
+} ThreadInfo;
 
 /*!
 \class Thread thread.h "server\desktop\src\common\thread.h"
@@ -29,17 +38,14 @@ Factory for unix/bsd/windows structure of thread.
 class Thread
 {
 public:
-	static int activeThreadsCount;		///< Amount of current active threads
-	static int threadLID;				///< Last started thread ID
-	static vector<Thread*> ThreadList;	///< List of current thread objects
+	static int threadLastGroupID;			///< ID of last allocated object
+	static vector<ThreadInfo*> ThreadList;	///< List of launched threads
 
-	int threadID;						///< Current thread local ID
-	bool runned;		///< TRUE if we started thread; false if not yet
-	void *result;		///< Value returned from thread function
+	int threadGroupID;						///< ID of this object.
+	int threadCount;						///< Amount of threads were launched from this object
 
 	/*!
 	Initialises OS depended thread structure.
-	Add self in ThreadList
 	*/
 	Thread();
 
@@ -55,21 +61,16 @@ public:
 	\param[in] threadFunc Pointer to a function to be executed by the thread.
 	\param[in] threadFuncArgs A pointer to a variable to be passed to the thread.
 	\param[out] result Value returned from thread function.
-	\return Thread ID if new thread started, -1 in other case.
+	\return Thread ID if new thread started.
 	*/
 	int Start(void *threadFunc, void *threadFuncArgs, void *result = nullptr);
 
 	/*!
-	Checks if current thread started and completed it's work
+	Checks if thread completed it's work
+	\param[in] threadID Id if thread to check.
 	\return TRUE if completed, FALSE in other case
 	*/
-	bool CheckCompleted();
-
-	/*!
-	Checks if current thread started and not completed it's work yet
-	\return TRUE if still active, FALSE in other case
-	*/
-	bool CheckActive();
+	bool IsCompleted(int threadID);
 
 	/*!
 	Looks for completed threads in threads list and free them.
@@ -77,15 +78,14 @@ public:
 	static void CheckListCompleted();
 
 	/*!
-	Looks for thread completed and if so - delete it from thread list.
+	Looks if thread completed and deletes it from thread list.
 	\param[in] ID Id of thread to check.
 	*/
-	static void CheckThreadCompleted(int ID);
+	static void CheckThreadCompleted(int groupID, int threadID);
 
 private:
 	IThread* thread;	///< OS depended thread structure
 };
 
-int Thread::activeThreadsCount = 0;
-int Thread::threadLID = -1;
-vector<Thread*> Thread::ThreadList;
+int Thread::threadLastGroupID = -1;
+vector<ThreadInfo*> Thread::ThreadList;

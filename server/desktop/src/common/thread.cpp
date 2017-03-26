@@ -8,58 +8,72 @@ Thread::Thread()
 	{
 		ThrowException("Can't allocate memory!");
 	}
-	this->runned = false;
-	this->ThreadList.push_back(this);
+	this->threadCount = 0;
+	if (this->threadLastGroupID < MAX_INT)
+	{
+		this->threadLastGroupID++;
+	}
+	else
+	{
+		this->threadLastGroupID = 0;
+	}
+	this->threadGroupID = this->threadLastGroupID;
 }
 
 Thread::~Thread()
 {
-	delete this->thread;
-	this->activeThreadsCount--;
+	this->CheckListCompleted();
 }
 
 int Thread::Start(void *threadFunc, void *threadFuncArgs, void *result)
 {
-	if (this->runned)
-	{
-		return -1;
-	}
-
-	if (this->threadLID < MAX_INT)
-	{
-		this->threadLID++;
-	}
-	else
-	{
-		this->threadLID = 0;
-	}
-	this->threadID = this->threadLID;
-	if (this->activeThreadsCount >= this->thread->GetMaxThreadCount())
+	if (this->ThreadList.size() >= this->thread->GetMaxThreadCount())
 	{
 		this->CheckListCompleted();
-		if (this->activeThreadsCount >= this->thread->GetMaxThreadCount())
+		if (this->ThreadList.size() >= this->thread->GetMaxThreadCount())
 		{
-			return -1;
+			ThrowThreadException("Can't start new thread. Amount of launched threads is max!");
 		}
 	}
 
-	this->thread->Init(threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
-	this->result = result;
-	this->thread->Start();
-	this->runned = true;
-	this->activeThreadsCount++;
+	ThreadInfo* thrInfo = new ThreadInfo;
+	if (!thrInfo)
+	{
+		ThrowThreadExceptionWithCode("Can't allocate memory for thread info structure!", GetLastError());
+	}
 
-	return this->threadLID;
+	thrInfo->threadID = this->threadCount;
+	if (this->threadCount < MAX_INT)
+	{
+		this->threadCount++;
+	}
+	else
+	{
+		this->threadCount = 0;
+	}
+	thrInfo->result = result;
+	thrInfo->thr = this;
+	this->ThreadList.push_back(thrInfo);
+
+	this->thread->Init(thrInfo->threadID, threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
+	this->thread->Start(thrInfo->threadID);
+
+	return thrInfo->threadID;
 }
 
-bool Thread::CheckCompleted()
+bool Thread::IsCompleted(int threadID)
 {
-	return (this->runned && !this->thread->CheckActive(this->result));
-}
-
-bool Thread::CheckActive()
-{
-	return (this->runned && this->thread->CheckActive(this->result));
+	for (size_t i = 0; i < this->ThreadList.size(); i++)
+	{
+		if (!this->ThreadList[i])
+		{
+			this->ThreadList.erase(this->ThreadList.begin() + i);
+		}
+		if ((this->ThreadList[i]->thr->threadGroupID == this->threadGroupID) && (this->ThreadList[i]->threadID = threadID))
+		{
+			return (!this->thread->CheckActive(threadID, this->ThreadList[i]->result));
+		}
+	}
 }
 
 void Thread::CheckListCompleted()
@@ -70,7 +84,7 @@ void Thread::CheckListCompleted()
 		{
 			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
 		}
-		if (Thread::ThreadList[i]->CheckCompleted())
+		if (Thread::ThreadList[i]->thr->IsCompleted(Thread::ThreadList[i]->threadID))
 		{
 			delete Thread::ThreadList[i];
 			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
@@ -78,7 +92,7 @@ void Thread::CheckListCompleted()
 	}
 }
 
-void Thread::CheckThreadCompleted(int ID)
+void Thread::CheckThreadCompleted(int groupID, int threadID)
 {
 	for (size_t i = 0; i < Thread::ThreadList.size(); i++)
 	{
@@ -87,7 +101,7 @@ void Thread::CheckThreadCompleted(int ID)
 			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);
 			return;
 		}
-		if (Thread::ThreadList[i]->threadID == ID && Thread::ThreadList[i]->CheckCompleted())
+		if (Thread::ThreadList[i]->threadID == threadID && Thread::ThreadList[i]->thr->IsCompleted(Thread::ThreadList[i]->threadID))
 		{
 			delete Thread::ThreadList[i];
 			Thread::ThreadList.erase(Thread::ThreadList.begin() + i);

@@ -62,9 +62,9 @@ size_lt WinDir::GetDirSize(const wchar_t *wPath)
 			Thread* thr = new Thread();
 			if (!thr)
 			{
-				ThrowException("Can't allocate memory!");
+				//TODO: ThrowDirException("Can't allocate memory!");
 			}
-			size_lt res;
+			size_lt res = 0;
 			Thread::CheckListCompleted();
 			if (thr->Start(GDS, filePath, &res) < 0)
 			{

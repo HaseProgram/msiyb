@@ -7,41 +7,59 @@ WinThread::WinThread()
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo(&sysinfo);
 	this->maxThreadsCount = sysinfo.dwNumberOfProcessors;
-	this->threadID = -1;
 }
 
-void WinThread::Init(LPTHREAD_START_ROUTINE threadFunc, LPVOID threadFuncArgs, SIZE_T threadStackSize, DWORD threadFlags, LPSECURITY_ATTRIBUTES threadSecurityAttributes)
+WinThread::~WinThread()
 {
-	this->threadSecurityAttributes = threadSecurityAttributes;
-	this->threadStackSize = threadStackSize;
-	this->threadFunc = threadFunc;
-	this->threadFuncArgs = threadFuncArgs;
-	this->threadFlags = threadFlags;
+	this->freeHandles();
 }
 
-void WinThread::Init(void * threadFunc, void * threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes)
+void WinThread::Init(int threadID, LPTHREAD_START_ROUTINE threadFunc, LPVOID threadFuncArgs, SIZE_T threadStackSize, DWORD threadFlags, LPSECURITY_ATTRIBUTES threadSecurityAttributes)
 {
-	this->threadFunc = (LPTHREAD_START_ROUTINE)threadFunc;
-	this->threadFuncArgs = threadFuncArgs;
-	this->threadStackSize = threadStackSize;
+	if (this->ThreadIDExists(threadID))
+	{
+		ThrowThreadException("Can not init thread: thread with threadID already exists!");
+	}
+	THREADHANDLE *tHandle = new THREADHANDLE;
+	tHandle->threadID = threadID;
+	tHandle->threadSecurityAttributes = threadSecurityAttributes;
+	tHandle->threadStackSize = threadStackSize;
+	tHandle->threadFunc = threadFunc;
+	tHandle->threadFuncArgs = threadFuncArgs;
+	tHandle->threadFlags = threadFlags;
+	this->hThreads.push_back(tHandle);
+}
+
+void WinThread::Init(int threadID, void *threadFunc, void *threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes)
+{
+	if (this->ThreadIDExists(threadID))
+	{
+		ThrowThreadException("Can not init thread: thread with threadID already exists!");
+	}
+	THREADHANDLE *tHandle = new THREADHANDLE;
+	this->GetThreadID = threadID;
+	tHandle->threadFunc = (LPTHREAD_START_ROUTINE)threadFunc;
+	tHandle->threadFuncArgs = threadFuncArgs;
+	tHandle->threadStackSize = threadStackSize;
 	switch (threadFlags)
 	{
 	case RUNIMMEDIATLY:
-		this->threadFlags = 0;
+		tHandle->threadFlags = 0;
 		break;
 	case CREATESUSPENDED:
-		this->threadFlags = CREATE_SUSPENDED;
+		tHandle->threadFlags = CREATE_SUSPENDED;
 		break;
 	case RESERVESTACK:
-		this->threadFlags = STACK_SIZE_PARAM_IS_A_RESERVATION;
+		tHandle->threadFlags = STACK_SIZE_PARAM_IS_A_RESERVATION;
 		break;
 	}
 	switch (threadSecurityAttributes)
 	{
 	case ENULL:
-		this->threadSecurityAttributes = NULL;
+		tHandle->threadSecurityAttributes = NULL;
 		break;
 	}
+	this->hThreads.push_back(tHandle);
 }
 
 int WinThread::GetMaxThreadCount()
@@ -49,33 +67,79 @@ int WinThread::GetMaxThreadCount()
 	return this->maxThreadsCount;
 }
 
-void WinThread::Start()
+void WinThread::Start(int threadID)
 {
-	this->hThread = CreateThread(this->threadSecurityAttributes,
-		this->threadStackSize,
-		this->threadFunc,
-		this->threadFuncArgs,
-		this->threadFlags,
-		&this->threadID);
-
-	if(!this->hThread)
+	for (int i = 0; i < this->hThreads.size(); i++)
 	{
-		ThrowThreadException("Could not create new thread!");
+		if (this->hThreads[i]->threadID == threadID)
+		{
+			this->hThreads[i]->hThread = CreateThread(this->hThreads[i]->threadSecurityAttributes,
+				this->hThreads[i]->threadStackSize,
+				this->hThreads[i]->threadFunc,
+				this->hThreads[i]->threadFuncArgs,
+				this->hThreads[i]->threadFlags,
+				&this->hThreads[i]->threadSystemID);
+
+			if (!this->hThreads[i]->hThread)
+			{
+				this->freeHandles(threadID);
+				ThrowThreadExceptionWithCode("Could not create new thread!",GetLastError());
+			}
+			return;
+		}
 	}
+	ThrowThreadException("Can not start thread: threadID not found!");
 }
 
-long WinThread::GetThreadID()
+long WinThread::GetThreadID(int threadID)
 {
-	return this->threadID;
+	for (int i = 0; i < this->hThreads.size(); i++)
+	{
+		if (this->hThreads[i]->threadID == threadID)
+		{
+			return this->hThreads[i]->threadSystemID;
+		}
+	}
+	ThrowThreadException("Can not get thread system ID: threadID not found!");
 }
 
-bool WinThread::CheckActive(void *result)
+bool WinThread::CheckActive(int threadID, void *result)
 {
-	this->status = GetExitCodeThread(this->hThread, this->exitCode);
-	result = this->exitCode;
-	if (this->status == 0)
+	for (int i = 0; i < this->hThreads.size(); i++)
 	{
-		ThrowThreadExceptionWithCode("Can not check thread status!", GetLastError());
+		if (this->hThreads[i]->threadID == threadID)
+		{
+			this->hThreads[i]->status = GetExitCodeThread(this->hThreads[i]->hThread, this->hThreads[i]->exitCode);
+			result = this->hThreads[i]->exitCode;
+			if (this->hThreads[i]->status == 0)
+			{
+				ThrowThreadExceptionWithCode("Can not check thread status!", GetLastError());
+			}
+			return (this->hThreads[i]->status == STILL_ACTIVE);
+		}
 	}
-	return (this->status == STILL_ACTIVE);
+	ThrowThreadException("Can not check thread status: threadID not found!");
+}
+
+bool WinThread::ThreadIDExists(int threadID)
+{
+	for (int i = 0; i < this->hThreads.size(); i++)
+	{
+		if (this->hThreads[i]->threadID == threadID)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void WinThread::freeHandles(int handleID)
+{
+	for (int i = 0; i < this->hThreads.size(); i++)
+	{
+		if (handleID < 0 || this->hThreads[i]->threadID == handleID)
+		{
+			delete this->hThreads[i];
+		}
+	}
 }
