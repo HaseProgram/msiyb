@@ -8,13 +8,14 @@ Thread::Thread()
 
 Thread::~Thread()
 {
+	this->WaitToComplete();
 	this->CheckListCompleted();
 }
 
 int Thread::Start(void *threadFunc, void *threadFuncArgs, void *result)
 {
-	ThreadData* thrInfo = new ThreadData;
-	if (!thrInfo)
+	ThreadData* thrData = new ThreadData;
+	if (!thrData)
 	{
 		ThrowThreadExceptionWithCode("Can't allocate memory for thread info structure!", GetLastError());
 	}
@@ -28,22 +29,48 @@ int Thread::Start(void *threadFunc, void *threadFuncArgs, void *result)
 		}
 	}
 
-	this->threadList.push_back(thrInfo);
+	this->threadList.push_back(thrData);
+	this->threadPool.push_back(thrData);
 
-	thrInfo->threadID = this->lastThreadID++;
+	thrData->threadID = this->lastThreadID++;
 
-	thrInfo->threadOSPtr = new OSThread;
-	if (!thrInfo->threadOSPtr)
+	thrData->threadOSPtr = new OSThread;
+	if (!thrData->threadOSPtr)
 	{
 		ThrowException("Can't allocate memory!");
 	}
-	thrInfo->result = result;
-	thrInfo->thr = this;
+	thrData->result = result;
+	thrData->thr = this;
 
-	thrInfo->threadOSPtr->Init(threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
-	thrInfo->threadOSPtr->Start();
+	thrData->threadOSPtr->Init(threadFunc, threadFuncArgs, 0, t_flags::RUNIMMEDIATLY, t_secattr::ENULL);
+	thrData->threadOSPtr->Start();
 
-	return thrInfo->threadID;
+	return thrData->threadID;
+}
+
+void Thread::WaitToComplete()
+{
+	bool existsRunning = true;
+	while (existsRunning)
+	{
+		existsRunning = false;
+		for (int i = 0; i < this->threadPool.size(); i++)
+		{
+			existsRunning = this->threadPool[i]->threadOSPtr->CheckActive(this->threadPool[i]->result);
+			if (existsRunning)
+			{
+				break;
+			}
+			delete this->threadPool[i]->threadOSPtr;
+			delete this->threadPool[i]->thr;
+			delete this->threadPool[i];
+			this->threadPool.erase(this->threadPool.begin() + i);
+		}
+	}
+	if (this->threadPool.size() > 0)
+	{
+		ThrowThreadException("There left threads after function WaitToComplete!");
+	}
 }
 
 bool Thread::IsCompleted(int threadID)

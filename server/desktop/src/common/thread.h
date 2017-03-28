@@ -39,10 +39,9 @@ Factory for unix/bsd/windows structure of thread.
 class Thread
 {
 public:
-	static int lastThreadID;			///< ID of last thread
-	static vector<ThreadInfo*> threadList;	///< List of launched threads
+	static int lastThreadID;				///< ID of last thread
+	static vector<ThreadData*> threadList;	///< List of launched threads
 
-	int threadGroupID;						///< ID of this object.
 	int threadCount;						///< Amount of threads were launched from this object
 
 	/*!
@@ -67,6 +66,11 @@ public:
 	int Start(void *threadFunc, void *threadFuncArgs, void *result = nullptr);
 
 	/*!
+	Suspend programm before all threads in pool completed their work.
+	*/
+	void WaitToComplete();
+
+	/*!
 	Checks if thread completed it's work
 	\param[in] threadID Id if thread to check.
 	\return TRUE if completed, FALSE in other case
@@ -83,7 +87,10 @@ public:
 	\param[in] ID Id of thread to check.
 	*/
 	static void CheckThreadCompleted(int threadID);
+
+private:
+	vector<ThreadData*> threadPool;	///< Pointers to threads launched from this object.
 };
 
 int Thread::lastThreadID = -1;
-vector<ThreadInfo*> Thread::threadList;
+vector<ThreadData*> Thread::threadList;

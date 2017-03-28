@@ -45,13 +45,14 @@ size_lt WinDir::GetDirSize(const wchar_t *wPath)
 	vector<size_lt> results;
 	int resultCount = 0;
 
+	Thread* thr = new Thread();
 	do
 	{
 		if (lstrcmp(fdFindData.cFileName, TEXT(".")) == 0 || lstrcmp(fdFindData.cFileName, TEXT("..")) == 0)
 		{
 			continue;
 		}
-
+		
 		LPWSTR filePath;
 		wcscpy(filePath, wPath);
 		lstrcatW(filePath, fdFindData.cFileName);
@@ -59,14 +60,10 @@ size_lt WinDir::GetDirSize(const wchar_t *wPath)
 		if (fdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			lstrcatW(filePath, TEXT("\\"));
-			Thread* thr = new Thread();
-			if (!thr)
-			{
-				//TODO: ThrowDirException("Can't allocate memory!");
-			}
+			
 			size_lt res = 0;
 			Thread::CheckListCompleted();
-			if (thr->Start(GDS, filePath, &res) < 0)
+			if (!thr || thr->Start(GDS, filePath, &res) < 0)
 			{
 				size += WinDir::GetDirSize(filePath);
 			}
@@ -78,8 +75,8 @@ size_lt WinDir::GetDirSize(const wchar_t *wPath)
 			size += File::FileSize(path);
 		}
 	} while (FindNextFile(hFind, &fdFindData));
-
-	
+	thr->WaitToComplete();
+	delete thr;
 	FindClose(hFind);
 }
 
