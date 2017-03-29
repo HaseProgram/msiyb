@@ -101,7 +101,6 @@ int WinSocket::RecvAll(char *buf)
 	sizeBuffer = 0;
 	while (sizeBuffer < lenght)
 	{
-
 		int recieved = recv(sock, buf + sizeBuffer, lenght - sizeBuffer, 0);
 		sizeBuffer += recieved;
 		if (recieved < 0)

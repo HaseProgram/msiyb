@@ -25,8 +25,6 @@
 
 class ThreadException : public Exception
 {
-	char message[1024];
-	long errCode;
 public:
 	ThreadException(const char* message, const char *file, const char *function, int line, long errCode)
 	{

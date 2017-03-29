@@ -8,11 +8,12 @@ typedef WinSocket OSSocket;
 typedef UnixSocket OSSocket;
 #endif
 
-class Socket
+class Socket : public ISocket
 {
 	ISocket *sock;
 public:
 	Socket();
+	Socket(ISocket*);
 	Socket(short port);
 	Socket(int port, char* ip);
 	Socket(int port, char *ip, SocketFamily family, SocketType type, SocketProtocol);
@@ -21,6 +22,7 @@ public:
 	int SendAll(char *buf, int size);
 	void Connect();
 	void Listen(int len);
+	Socket* AcceptOSSocket();
 	Socket* AcceptSocket();
 	ISocket* Accept();
 	void Close();
