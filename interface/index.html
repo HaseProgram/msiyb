@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style_pop.css">
+    </head>
+    <body>
+        <script>
+            function hide(nodeId)
+            {
+                var node = document.getElementById(nodeId);
+                if (node)
+                {
+                    node.style.display = 'none';
+                } 
+            }
+
+            function show(nodeId)
+            {
+                var node = document.getElementById(nodeId);
+                if (node)
+                {
+                    node.style.display = 'block';
+                } 
+            }
+        </script>
+
+    <div class="cover_all">
+        <div class="cov_flex">
+        <div class="bla1"><a href="#windPopUp" id="gear"><i class="fa fa-cog"></i><a href="#x" id="windPopUp" class="backgroundPopUp">
+						<div class="popUp">
+							<a class="close" title="Закрыть" href="#close"></a>
+						</div>
+					</a></a></div>
+        <form method="get" action="/search" target="_blank"><div class="bla2">
+                         <input name="q" id="search" value="" placeholder=" поиск">
+            
+            <button id="search_button"><i class="fa fa-search"></i></button>
+            </div></form>
+        
+        <div class="bla3"><img src="pic/emblem.png" id="emblem" height="50"></div>
+        
+        
+
+        
+        
+        
+        <div class="cover">          
+            <div class="poster_all">
+                <div class="sort_display">
+                    <div class="display_media"><ul>
+                        <li class="li_active"><i class="fa fa-th"></i></li>
+                        <li><i class="fa fa-list"></i></li>
+                    </ul></div>
+                
+                <div class="sort"><ul>
+                   <li onclick=""> <i class="fa fa-th-large"></i></li>
+                   <li> <i class="fa fa-film"></i></li>
+                   <li> <i class="fa fa-music"></i></li>
+                   <li> <i class="fa fa-picture-o"></i></li></ul></div>
+                </div>    
+                <div class="poster poster_width"><img src="pic/Logan.jpg"></div>
+                
+
+                
+                
+                <div class="poster poster_width"><img src="pic/eragon.jpg"></div>
+                <div class="poster poster_width"><img src="pic/gameofthrones.jpg"></div>
+                <div class="poster poster_width"><img src="pic/Logan.jpg"></div>
+                
+                  <div class="poster poster_width"><img src="pic/eragon.jpg"></div>
+                <div class="poster poster_width"><img src="pic/gameofthrones.jpg"></div>              
+                
+                                <div class="poster_additions"><div class="pointer"></div><img src="pic/Logan.jpg">
+                   <div class="aditions_cover">
+                    <p class="name">LOGAN </p>
+                    
+                   <ul>
+                   <li><i class="fa fa-clock-o"></i> 137 мин.</li>
+                   <li><span class="additions">audio</span> ENG</li>
+                   <li><span class="additions">sub</span> ENG</li>
+                   <i class="fa fa-play play"></i> PLAY</ul>
+                    <hr>
+                    <p>В недалеком будущем уставший от жизни Логан заботится о больном профессоре Икс, который прячется неподалеку от мексиканской границы. Но Логан больше не сможет скрывать свое прошлое, когда встретится с юным мутантом, которого преследуют темные силы.</p></div></div>
+                
+                
+                
+
+            
+                </div>
+        </div>
+            
+    </div>       
+    <footer>
+        <div class="copyright"><img src="pic/emblem_small.png">© 2017</div>
+        <div class="terms"><a href="#windPopUpterms">Terms of use<a href="#x" id="windPopUpterms" class="backgroundPopUp">
+						<div class="popUp">
+							<a class="close" title="Закрыть" href="#close"></a>
+                            <p>Пользовательское соглашение, бла-бла-бал</p>
+						</div>
+					</a></a></div></footer></div>
+    </body>
+</html>
