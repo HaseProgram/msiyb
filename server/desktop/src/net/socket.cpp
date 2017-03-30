@@ -5,6 +5,13 @@ Socket::Socket()
 	sock = new OSSocket();
 }
 
+Socket::Socket(ISocket *socket)
+{
+	sock = (OSSocket*)socket;
+	//sock = new OSSocket();
+}
+
+
 Socket::Socket(short port)
 {
 	sock = new OSSocket(port);
@@ -46,9 +53,22 @@ void Socket::Listen(int len)
 	sock->Listen(len);
 }
 
+Socket* Socket::AcceptOSSocket()
+{
+	//OSSocket *newOSSocket = (OSSocket*)Accept();
+//	Socket *newSocket = new Socket()
+	return (Socket*)Accept();
+}
+
 Socket* Socket::AcceptSocket()
 {
-	return (Socket*)Accept();
+	Socket* newSocket = new Socket(Accept());
+	if (!newSocket)
+	{
+		ThrowSocketException("Cant Allocate new socke");
+	}
+
+	return newSocket;
 }
 
 ISocket* Socket::Accept()
