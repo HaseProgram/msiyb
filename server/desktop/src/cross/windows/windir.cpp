@@ -78,5 +78,6 @@ size_lt WinDir::GetDirSize(const wchar_t *wPath)
 	thr->WaitToComplete();
 	delete thr;
 	FindClose(hFind);
+	return size;
 }
 

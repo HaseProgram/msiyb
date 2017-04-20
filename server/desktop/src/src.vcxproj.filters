@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Файлы исходного кода">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы\common">
+      <UniqueIdentifier>{484d8ce6-6a69-4cb6-8e9b-5e78db25026c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\cross">
+      <UniqueIdentifier>{3dd8398c-f7ed-4451-8bf7-05190f10e867}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\cross\windows">
+      <UniqueIdentifier>{5ebd544c-5558-432e-a87a-282c35f7adf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\net">
+      <UniqueIdentifier>{de4c3950-6e78-4a77-aeaf-833c95b960ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\tools">
+      <UniqueIdentifier>{406217cf-c11b-4f47-af68-a56c5fde6da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\tools\exception">
+      <UniqueIdentifier>{5db9a1d5-140e-4f04-bbbe-0b37417e4f8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="common\dir.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\stringmethods.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\thread.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\ifile.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\isocket.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\ithread.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\winfile.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\winsocket.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\winthread.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="net\socket.h">
+      <Filter>Заголовочные файлы\net</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exception.h">
+      <Filter>Заголовочные файлы\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\logger.h">
+      <Filter>Заголовочные файлы\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\direxception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\fileexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\socketexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\thredexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="common\file.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="common\stringmethods.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="common\thread.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\winfile.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\winsocket.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\winthread.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="net\socket.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

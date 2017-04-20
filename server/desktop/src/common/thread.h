@@ -42,8 +42,6 @@ public:
 	static int lastThreadID;				///< ID of last thread
 	static vector<ThreadData*> threadList;	///< List of launched threads
 
-	int threadCount;						///< Amount of threads were launched from this object
-
 	/*!
 	Initialises OS depended thread structure.
 	*/
