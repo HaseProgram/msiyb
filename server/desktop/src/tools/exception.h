@@ -56,11 +56,14 @@ inline const char *ParseException(int errCode)
 #endif
 
 class Exception : public std::exception
-{
-public:
+{	
+protected:
 	char message[ERROR_MSG_SIZE];
 	long errCode;
+public:
 
+
+	Exception() {}
 
 	// TODO LOG Exceptions
 	Exception(char* message, int errnum = -1, const char* = nullptr, int line = -1)
@@ -76,6 +79,10 @@ public:
 		this->errCode = errCode;
 	}
 
+	Exception(const Exception &e)
+	{
+		strcpy(message, e.message);
+	}
 
 	Exception(const char* message, const char* file, const char* function, int line)
 	{
@@ -94,13 +101,13 @@ public:
 		this->errCode = errCode;
 	}
 
-	Exception()
-	{
-
-	}
+	//Exception()
+	//{
+	//	memset(message, 0, sizeof(message));
+	//}
 
 	virtual const char* what()
 	{
-		return this->message;
+		return message;
 	}
 };

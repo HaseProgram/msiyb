@@ -46,6 +46,11 @@ public:
 	*/
 	void Open(FileOpenMode mode);
 	
+	// TODO
+	// void Open(const char* fileName, FileOpenMode mode);
+	// File(const File &file)
+	// operator = ()
+
 	/*!
 	Flushes bytes from cache buffer to write into file.
 	Closes file descriptor.

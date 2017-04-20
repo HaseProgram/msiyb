@@ -24,9 +24,8 @@
 
 class FileException : public Exception
 {
-	char message[1024];
-	long errCode;
 public:
+	FileException() {}
 	FileException(const char* message, const char *file, const char *function, int line, long errCode)
 	{
 		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n Error code: %d\n", file, function, line, message, errCode);
