@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "main.h"
-<<<<<<< HEAD
 
 using namespace std;
 
