@@ -8,6 +8,7 @@
 */
 
 #pragma once
+#include <string>
 
 #ifdef _WIN32
 #include "../cross/windows/winfile.h"
@@ -16,8 +17,6 @@ typedef WinFile OSFile;
 typedef UnixFile OSFile;
 #include "../cross/unix/fileimpl.h"
 #endif
-
-using namespace std;
 
 /*!
 \class File file.h "server\desktop\src\common\file.h"

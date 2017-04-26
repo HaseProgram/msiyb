@@ -8,6 +8,7 @@
 */
 
 #pragma once
+#include "../defines.h"
 #include "../tools/exceptions/thredexception.h"
 
 /// Security attributes

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "winfile.h"
 #include "../../common/stringmethods.h"
 

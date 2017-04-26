@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "socket.h"
+
 Socket::Socket()
 {
 	sock = new OSSocket();

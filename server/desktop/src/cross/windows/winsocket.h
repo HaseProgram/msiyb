@@ -5,6 +5,9 @@
 //#include <winsock2.h>
 //#include <ws2tcpip.h>
 #include "../isocket.h"
+
+#include "windows.h"
+
 #define SIZE_FIRST_MESSAGE sizeof(long)
 
 class WinSocket : public ISocket

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "main.h"
 
 using namespace std;
@@ -33,6 +32,8 @@ int main()
 			client->Recv(tmp, 200);
 			if (!strcmp(tmp, "hello"))
 				size_lt cl = client->SendAll((char*)arr, s);
+#else
+			serverInstance->Start();
 #endif
 			return 0;
 			//serverInstance->Start();
@@ -40,11 +41,20 @@ int main()
 		}
 		catch (Exception &error)
 		{
-			FileException *f = (FileException*)&error;
-			printf("%s\n %s", f->what(), ParseException(f->GetErrorCode()));
+			printf("%s",error.what());
 			failCount++;
+			if (failCount < 5)
+			{
+				printf("\nTrying to restart...\n\n");
+			}
+			else
+			{
+				printf("\nWell, sorry something went wrong. We can not start server.\n");
+			}
+			//FileException *f = (FileException*)&error;
+			//printf("%s\n %s", f->what(), ParseException(f->GetErrorCode()));
 		}
 	}
-
+	system("pause");
 	return 1;
 }

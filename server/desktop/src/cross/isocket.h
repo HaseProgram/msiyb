@@ -1,6 +1,9 @@
 #pragma once
+
+#include "../defines.h"
 #include "../tools/exceptions/socketexception.h"
-typedef unsigned char byte;
+
+
 typedef enum End { SHUTRECV, SHUTSEND, SHUTBOTH } How;
 typedef enum SocketFamily_
 {

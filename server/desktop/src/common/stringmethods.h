@@ -8,8 +8,11 @@
 */
 
 #pragma once
+#include "../defines.h"
+#include "../tools/exception.h"
+#include <string>
 
-using namespace std;
+using std::string;
 
 /*!
 Realocates memory for char string array

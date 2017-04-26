@@ -1,5 +1,3 @@
-#include "stdafx.h"
-//#include "../../stdafx.h"
 #include "winthread.h"
 
 WinThread::WinThread()

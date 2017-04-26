@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "server.h"
 #include "common\file.h"
 
@@ -19,7 +18,7 @@ void Server::Start()
 		Bind and start listen
 	*/
 
-	File* testFile = new File("F:\\save.txt");
+	File* testFile = new File("F:\\sadve.txt");
 	testFile->Open(FileOpenMode::READONLY);
 	testFile->Close();
 

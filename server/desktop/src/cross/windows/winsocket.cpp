@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "winsocket.h"
 
 WinSocket::WinSocket()

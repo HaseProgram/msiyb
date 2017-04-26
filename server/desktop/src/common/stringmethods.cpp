@@ -1,5 +1,3 @@
-#include "stdafx.h"
-#include "../stdafx.h"
 #include "stringmethods.h"
 
 using namespace std;

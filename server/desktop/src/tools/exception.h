@@ -1,6 +1,6 @@
 #pragma once
 #include <exception>
-#include "../stdafx.h"
+#include <stdio.h>
 
 #ifdef _WIN32 
 #define LastError GetLastError()
@@ -12,6 +12,7 @@
 #define DEBUG
 
 #ifdef _WIN32
+#include "windows.h"
 
 #ifdef DEBUG
 #define ThrowException(msg)											\

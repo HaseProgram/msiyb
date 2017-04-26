@@ -10,6 +10,7 @@
 #pragma once
 
 #include "../ifile.h"
+#include "windows.h"
 
 using namespace std;
 

@@ -18,7 +18,8 @@ typedef WinThread OSThread;
 typedef UnixThread OSThread;
 #endif
 
-using namespace std;
+#include <vector>
+
 class Thread;
 
 /// Single thread info

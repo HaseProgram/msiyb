@@ -14,6 +14,7 @@
 #define MIN_STRING_SIZE 128
 #define MIN_STRING_ARRAY_SIZE 2
 
+#include "../defines.h"
 #include "../tools/exceptions/fileexception.h"
 
 /// File meta data structure

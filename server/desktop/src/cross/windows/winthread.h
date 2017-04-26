@@ -10,6 +10,7 @@
 #pragma once
 
 #include "../ithread.h"
+#include "windows.h"
 
 using namespace std;
 
