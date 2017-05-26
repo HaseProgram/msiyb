@@ -1,61 +1,140 @@
 #include "file.h"
 #include "stringmethods.h"
 
+File::File()
+{
+	_opened = false;
+	_bufferSize = FILE_BUFFER_SIZE;
+
+	_fileName = new char[MAX_PATH];
+	if (!_fileName)
+	{
+		ThrowException("Can't allocate memory!")
+	}
+
+	_cacheReaded = new byte[_bufferSize];
+	if (!_cacheReaded)
+	{
+		ThrowException("Can't allocate memory!");
+	}
+	_bytesInCacheReaded = 0;
+	_posInCacheReaded = 0;
+
+	_cacheToWrite = new byte[_bufferSize];
+	if (!_cacheToWrite)
+	{
+		ThrowException("Can't allocate memory!");
+	}
+	_bytesInCacheToWrite = 0;
+	_posInCacheToWrite = 0;
+
+	_file = new OSFile();
+	if (!_file)
+	{
+		ThrowException("Can't allocate memory!");
+	}
+}
+
 File::File(const char* fileName, size_lt bufferSize)
 {
-	strcpy(this->fileName, fileName);
-	this->opened = false;
+	_fileName = new char[MAX_PATH];
+	if (!_fileName)
+	{
+		ThrowException("Can't allocate memory!")
+	}
 
-	this->bufferSize = bufferSize;
+	strcpy(_fileName, fileName);
+	_opened = false;
 
-	this->cacheReaded = new byte[this->bufferSize];
-	if (!this->cacheReaded)
+	_bufferSize = bufferSize;
+
+	_cacheReaded = new byte[_bufferSize];
+	if (!_cacheReaded)
 	{
 		ThrowException("Can't allocate memory!");
 	}
-	this->bytesInCacheReaded = 0;
-	this->posInCacheReaded = 0;
+	_bytesInCacheReaded = 0;
+	_posInCacheReaded = 0;
 
-	this->cacheToWrite = new byte[this->bufferSize];
-	if (!this->cacheToWrite)
+	_cacheToWrite = new byte[_bufferSize];
+	if (!_cacheToWrite)
 	{
 		ThrowException("Can't allocate memory!");
 	}
-	this->bytesInCacheToWrite = 0;
-	this->posInCacheToWrite = 0;
+	_bytesInCacheToWrite = 0;
+	_posInCacheToWrite = 0;
 
-	this->file = new OSFile(fileName);
+	_file = new OSFile(fileName);
+	if (!_file)
+	{
+		ThrowException("Can't allocate memory!");
+	}
 }
 
 File::~File()
 {
-	if (this->opened)
+	if (_opened)
 	{
-		this->Close();
+		Close();
 	}
 
-	delete[] this->cacheReaded;
-	delete[] this->cacheToWrite;
-	delete this->file;
+	delete[] _cacheReaded;
+	delete[] _cacheToWrite;
+	delete _file;
 }
 
 void File::Open(FileOpenMode mode)
 {
-	this->file->Open(mode);
+	// TODO check previous opened file
+	if (_opened)
+	{
+		Close();
+	}
+	if (mode == FileOpenMode::WRRITEATTEHEND)
+	{
+		_file->Open(FileOpenMode::READWRITE);
+		_file->Seek(0, SeekReference::END);
+	}
+	else
+	{
+		_file->Open(mode);
+	}
+}
+
+void File::Open(const char *fileName, FileOpenMode mode)
+{
+	if (_opened)
+	{
+		Close();
+	}
+
+	strcpy(_fileName, fileName);
+
+	if (mode == FileOpenMode::WRRITEATTEHEND)
+	{
+		_file->Open(fileName, FileOpenMode::READWRITE);
+		_file->Seek(0, SeekReference::END);
+	}
+	else
+	{
+		_file->Open(fileName, mode);
+	}
+	_opened = true;
 }
 
 void File::Close()
 {
-	if (this->bytesInCacheToWrite > 0)
+	if (_bytesInCacheToWrite > 0)
 	{
-		this->Flush();
+		Flush();
 	}
-	this->file->Close();
+
+	_file->Close();
 }
 
 void File::Rename(const char *newFileName)
 {
-	this->file->Rename(newFileName);
+	_file->Rename(newFileName);
 }
 
 void File::Rename(const char *fileName, const char *newFileName)
@@ -65,7 +144,7 @@ void File::Rename(const char *fileName, const char *newFileName)
 
 bool File::Exist()
 {
-	return this->file->Exist();
+	return _file->Exist();
 }
 
 bool File::Exist(const char *fileName)
@@ -75,10 +154,10 @@ bool File::Exist(const char *fileName)
 
 FileMeta File::GetInfo()
 {
-	return this->GetInfo(this->fileName);
+	return GetInfo(_fileName);
 }
 
-FileMeta File::GetInfo(const char * fileName)
+FileMeta File::GetInfo(const char *fileName)
 {
 	FileMeta meta;
 	return meta;
@@ -86,7 +165,7 @@ FileMeta File::GetInfo(const char * fileName)
 
 void File::Delete()
 {
-	this->file->Delete();
+	_file->Delete();
 }
 
 void File::Delete(const char *fileName)
@@ -96,46 +175,46 @@ void File::Delete(const char *fileName)
 
 bool File::CheckCache()
 {
-	if (this->bytesInCacheReaded == 0)
+	if (_bytesInCacheReaded == 0)
 	{
-		this->bytesInCacheReaded = file->ReadBlock(this->cacheReaded, this->bufferSize);
-		if (this->bytesInCacheReaded == 0)
+		_bytesInCacheReaded = _file->ReadBlock(_cacheReaded, _bufferSize);
+		if (_bytesInCacheReaded == 0)
 		{
 			return false;
 		}
-		this->posInCacheReaded = 0;
+		_posInCacheReaded = 0;
 	}
 	return true;
 }
 
 int File::ReadByte()
 {
-	if (!this->CheckCache())
+	if (!CheckCache())
 	{
 		return -1;
 	}
-	byte b = this->cacheReaded[this->posInCacheReaded];
-	this->posInCacheReaded++;
-	this->bytesInCacheReaded--;
+	byte b = _cacheReaded[_posInCacheReaded];
+	_posInCacheReaded++;
+	_bytesInCacheReaded--;
 	return b;
 }
 
 size_lt File::ReadBlock(byte *block, size_lt blockSize)
 {
-	if (blockSize > this->bufferSize)
+	if (blockSize > _bufferSize)
 	{
 		/*
 		If our size of block is bigger then max cache size:
 		1) If our cache isn't empty: we put our cache in block
 		2) Size of readed block: data which was in cache (maybe 0) + data readed from file (we read block size - data in cache)
 		*/
-		if (this->bytesInCacheReaded > 0)
+		if (_bytesInCacheReaded > 0)
 		{
-			memcpy(block, this->cacheReaded + this->posInCacheReaded, this->bytesInCacheReaded);
+			memcpy(block, _cacheReaded + _posInCacheReaded, _bytesInCacheReaded);
 		}
-		int size = this->bytesInCacheReaded + file->ReadBlock(block + this->bytesInCacheReaded, blockSize - this->bytesInCacheReaded);
-		this->bytesInCacheReaded = 0;
-		this->posInCacheReaded = 0;
+		int size = _bytesInCacheReaded + _file->ReadBlock(block + _bytesInCacheReaded, blockSize - _bytesInCacheReaded);
+		_bytesInCacheReaded = 0;
+		_posInCacheReaded = 0;
 		return size;
 	}
 	else
@@ -143,39 +222,39 @@ size_lt File::ReadBlock(byte *block, size_lt blockSize)
 		/*
 		If our size of block is less then max cache size:
 		1) If size of block is bigger then amount of bytes in cache:
-			1. We put our bytes from cache in block
-			2. We fill cache from file
-			3. We put remaining amount of bytes in block from just filled cache
-			4. If our block requires more bytes our file contains, size will be previous bytes amount in cache + size value readed from file.
-			   Else size = blockSize
+		1. We put our bytes from cache in block
+		2. We fill cache from file
+		3. We put remaining amount of bytes in block from just filled cache
+		4. If our block requires more bytes our file contains, size will be previous bytes amount in cache + size value readed from file.
+		Else size = blockSize
 		2) If size of block is less then amount of bytes in cache we just fill block from cache
 		*/
-		if (blockSize > this->bytesInCacheReaded)
+		if (blockSize > _bytesInCacheReaded)
 		{
-			memcpy(block, this->cacheReaded + this->posInCacheReaded, this->bytesInCacheReaded);
-			this->posInCacheReaded = 0;
-			size_lt tempReadedBytes = this->bytesInCacheReaded;
-			this->bytesInCacheReaded = file->ReadBlock(this->cacheReaded, this->bufferSize);
-			memcpy(block + tempReadedBytes, this->cacheReaded + this->posInCacheReaded, blockSize - tempReadedBytes);
-			if (blockSize-tempReadedBytes > this->bytesInCacheReaded)
+			memcpy(block, _cacheReaded + _posInCacheReaded, _bytesInCacheReaded);
+			_posInCacheReaded = 0;
+			size_lt tempReadedBytes = _bytesInCacheReaded;
+			_bytesInCacheReaded = _file->ReadBlock(_cacheReaded, _bufferSize);
+			memcpy(block + tempReadedBytes, _cacheReaded + _posInCacheReaded, blockSize - tempReadedBytes);
+			if (blockSize - tempReadedBytes > _bytesInCacheReaded)
 			{
-				tempReadedBytes += this->bytesInCacheReaded;
-				this->bytesInCacheReaded = 0;
-				this->posInCacheReaded = 0;
+				tempReadedBytes += _bytesInCacheReaded;
+				_bytesInCacheReaded = 0;
+				_posInCacheReaded = 0;
 				return tempReadedBytes;
 			}
 			else
 			{
-				this->bytesInCacheReaded = this->bufferSize - (blockSize - tempReadedBytes);
-				this->posInCacheReaded = blockSize - tempReadedBytes;
+				_bytesInCacheReaded = _bufferSize - (blockSize - tempReadedBytes);
+				_posInCacheReaded = blockSize - tempReadedBytes;
 				return blockSize;
 			}
 		}
 		else
 		{
-			memcpy(block, this->cacheReaded + this->posInCacheReaded, blockSize);
-			this->bytesInCacheReaded -= blockSize;
-			this->posInCacheReaded += blockSize;
+			memcpy(block, _cacheReaded + _posInCacheReaded, blockSize);
+			_bytesInCacheReaded -= blockSize;
+			_posInCacheReaded += blockSize;
 			return blockSize;
 		}
 	}
@@ -183,44 +262,45 @@ size_lt File::ReadBlock(byte *block, size_lt blockSize)
 
 void File::WriteByte(byte b)
 {
-	if (this->bytesInCacheToWrite == this->bufferSize)
+	if (_bytesInCacheToWrite == _bufferSize)
 	{
-		this->Flush();
+		Flush(); // After this operation write buffer is empty
 	}
-	if (this->bytesInCacheToWrite < this->bufferSize)
+	if (_bytesInCacheToWrite < _bufferSize)
 	{
-		this->cacheToWrite[this->posInCacheToWrite];
-		this->posInCacheToWrite++;
-		this->bytesInCacheToWrite++;
+		_cacheToWrite[_posInCacheToWrite] = b;
+		_posInCacheToWrite++;
+		_bytesInCacheToWrite++;
 	}
 }
 
 void File::WriteBlock(byte *block, size_lt blockSize)
 {
-	this->Flush();
-	this->file->WriteBlock(block, blockSize);
+	Flush();
+	_file->WriteBlock(block, blockSize);
 }
 
 void File::Flush()
 {
-	if (this->bytesInCacheReaded > 0)
+	if (_bytesInCacheReaded > 0)
 	{
-		this->bytesInCacheReaded = 0;
-		this->posInCacheReaded = 0;
+		_bytesInCacheReaded = 0;
+		_posInCacheReaded = 0;
 	}
-	this->file->WriteBlock(this->cacheToWrite + this->posInCacheToWrite, this->bytesInCacheToWrite);
-	this->bytesInCacheToWrite = 0;
-	this->posInCacheToWrite = 0;
+	_file->WriteBlock(_cacheToWrite, _bytesInCacheToWrite);
+	//this->file->WriteBlock(this->cacheToWrite + this->posInCacheToWrite, this->bytesInCacheToWrite);
+	_bytesInCacheToWrite = 0;
+	_posInCacheToWrite = 0;
 }
 
 size_lt File::Seek(size_lt offset, SeekReference move)
 {
-	return this->file->Seek(offset, move);
+	return _file->Seek(offset, move);
 }
 
 size_lt File::FileSize()
 {
-	return this->file->FileSize();
+	return _file->FileSize();
 }
 
 size_lt File::FileSize(const char *fileName)
@@ -307,7 +387,8 @@ size_lt File::ReadStringFromBuffer(char **string, byte *buf, size_lt *startPos, 
 			Resize(&str, &sizeString, sizeString * rCoef);
 		}
 
-		str[idx++] = buf[i];
+		if (buf[i] != '\n')
+			str[idx++] = buf[i];
 
 		if (buf[i] == '\n' || buf[i] == '\0' || i == sizeBuf - 1)
 		{

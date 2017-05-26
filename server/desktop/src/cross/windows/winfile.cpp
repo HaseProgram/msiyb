@@ -3,54 +3,57 @@
 
 WinFile::WinFile()
 {
-	this->fileName = nullptr;
-	this->wFileName = nullptr;
+	_fileName = new char[MAX_PATH];
+	_tFileName = new TCHAR[MAX_PATH];
+	_opened = false;
 }
 
 WinFile::WinFile(const char *fileName)
 {
-	this->fileName = new char[MAX_PATH];
-	if (!this->fileName)
+	_fileName = new char[MAX_PATH];
+	if (!_fileName)
 	{
 		ThrowException("Can't allocate memory on fileName");
 	}
 
-	this->wFileName = new wchar_t[MAX_PATH];
-	if (!this->wFileName)
+	_tFileName = new TCHAR[MAX_PATH];
+	if (!_tFileName)
 	{
-		ThrowException("Can't allocate memory on wFileName");
+		ThrowException("Can't allocate memory on tFileName");
 	}
 
-	strcpy(this->fileName, fileName);
-	ctow(this->fileName, this->wFileName);
-	this->opened = false;
+	strcpy(_fileName, fileName);
+	ctow(fileName, _tFileName);
+	_opened = false;
 }
 
 WinFile::~WinFile()
 {
-	if (this->opened)
+	if (_opened)
 	{
-		this->Close();
-	}
-	
-	if (this->fileName)
-	{
-		delete this->fileName;
+		Close();
 	}
 
-	if (this->wFileName)
-	{
-		delete this->wFileName;
-	}
+	delete[] _fileName;
+	delete[] _tFileName;
 }
 
 void WinFile::Open(FileOpenMode mode)
 {
-	this->hFile = this->Open(this->fileName, mode);
-	this->opened = true;
+	ctow(_fileName, _tFileName);
+	_hFile = Open(_tFileName, mode);
+	_opened = true;
 }
 
-HANDLE WinFile::Open(const char *fileName, FileOpenMode mode)
+void WinFile::Open(const char *fileName, FileOpenMode mode)
+{
+	strcpy(_fileName, fileName);
+	ctow(_fileName, _tFileName);
+	_hFile = Open(_tFileName, mode);
+	_opened = true;
+}
+
+HANDLE WinFile::Open(const TCHAR *fileName, FileOpenMode mode)
 {
 	DWORD creationDisposition = OPEN_EXISTING;
 	DWORD desiredAccess;
@@ -62,16 +65,17 @@ HANDLE WinFile::Open(const char *fileName, FileOpenMode mode)
 	case FileOpenMode::WRITE:
 		desiredAccess = GENERIC_WRITE;
 		break;
-	case FileOpenMode::WRITEONEXISTS:
+	case FileOpenMode::READWRITE:
+		desiredAccess = GENERIC_WRITE | GENERIC_READ;
+		creationDisposition = CREATE_ALWAYS;
+		break;
+	case FileOpenMode::WRITENEWFILE:
 		desiredAccess = GENERIC_WRITE | GENERIC_READ;
 		creationDisposition = CREATE_ALWAYS;
 		break;
 	}
 
-	wchar_t wFileName[MAX_PATH];
-	ctow(fileName, wFileName);
-
-	HANDLE hfile = CreateFile(wFileName, desiredAccess, FILE_SHARE_READ, NULL,
+	HANDLE hfile = CreateFile(fileName, desiredAccess, FILE_SHARE_READ, NULL,
 		creationDisposition, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hfile == INVALID_HANDLE_VALUE)
@@ -83,35 +87,38 @@ HANDLE WinFile::Open(const char *fileName, FileOpenMode mode)
 
 void WinFile::Close()
 {
-	this->Close(this->hFile);
-	this->opened = false;
+	Close(_hFile);
+	_opened = false;
 }
 
 void WinFile::Close(HANDLE hFile)
 {
-	if (!CloseHandle(hFile))
+	FlushFileBuffers(hFile); //?
+	if (hFile != INVALID_HANDLE_VALUE)
 	{
-		ThrowFileExceptionWithCode("Error occured while closing file!", GetLastError());
+		if (!CloseHandle(hFile))
+		{
+			ThrowFileExceptionWithCode("Error occured while closing file!", GetLastError());
+		}
 	}
 }
 
 void WinFile::Rename(const char *newFileName)
 {
-	this->Rename(this->fileName, newFileName);
+	Rename(_fileName, newFileName);
 
-	ctow(newFileName, this->wFileName);
-	strcpy(this->fileName, newFileName);
+	ctow(newFileName, _tFileName);
+	strcpy(_fileName, newFileName);
 }
 
 void WinFile::Rename(const char *fileName, const char * newFileName)
 {
-	wchar_t wFileName[MAX_PATH];
-	ctow(fileName, wFileName);
+	TCHAR tFileName[MAX_PATH];
+	TCHAR tNewFileName[MAX_PATH];
+	ctow(fileName, tFileName);
+	ctow(newFileName, tNewFileName);
 
-	wchar_t wNewFileName[MAX_PATH];
-	ctow(newFileName, wNewFileName);
-
-	if (!MoveFileEx(wFileName, wNewFileName, MOVEFILE_COPY_ALLOWED))
+	if (!MoveFileEx(tFileName, tNewFileName, MOVEFILE_COPY_ALLOWED))
 	{
 		ThrowFileExceptionWithCode("Can't rename file", GetLastError());
 	}
@@ -119,20 +126,20 @@ void WinFile::Rename(const char *fileName, const char * newFileName)
 
 bool WinFile::Exist()
 {
-	return this->Exist(this->wFileName);
+	return Exist(_tFileName);
 }
 
 bool WinFile::Exist(const char *fileName)
 {
-	wchar_t wFileName[MAX_PATH];
-	mbstowcs(wFileName, fileName, strlen(fileName) + 1);
-	return WinFile::Exist(wFileName);
+	TCHAR tFileName[MAX_PATH];
+	ctow(fileName, tFileName);
+	return WinFile::Exist(tFileName);
 }
 
-bool WinFile::Exist(const wchar_t *wFileName)
+bool WinFile::Exist(const TCHAR *tFileName)
 {
 	WIN32_FIND_DATA FindFileData;
-	HANDLE handle = FindFirstFile(wFileName, &FindFileData);
+	HANDLE handle = FindFirstFile(tFileName, &FindFileData);
 	bool found = (handle != INVALID_HANDLE_VALUE);
 	if (found)
 	{
@@ -143,19 +150,23 @@ bool WinFile::Exist(const wchar_t *wFileName)
 
 void WinFile::Delete()
 {
-	this->Delete(this->wFileName);
+	if (_opened)
+	{
+		Close(_hFile);
+	}
+	Delete(_tFileName);
 }
 
 void WinFile::Delete(const char *fileName)
 {
-	wchar_t wFileName[MAX_PATH];
-	mbstowcs(wFileName, fileName, strlen(fileName) + 1);
-	WinFile::Delete(wFileName);
+	TCHAR tFileName[MAX_PATH];
+	ctow(fileName, tFileName);
+	WinFile::Delete(tFileName);
 }
 
-void WinFile::Delete(const wchar_t *wFileName)
+void WinFile::Delete(const TCHAR *tFileName)
 {
-	if (!DeleteFile(wFileName))
+	if (!DeleteFile(tFileName))
 	{
 		ThrowFileExceptionWithCode("Can't delete file!", GetLastError());
 	}
@@ -163,7 +174,7 @@ void WinFile::Delete(const wchar_t *wFileName)
 
 size_lt WinFile::FileSize()
 {
-	return this->FileSize(this->hFile);
+	return FileSize(_hFile);
 }
 
 size_lt WinFile::FileSize(HANDLE hFile)
@@ -178,8 +189,12 @@ size_lt WinFile::FileSize(HANDLE hFile)
 
 size_lt WinFile::FileSize(const char *fileName)
 {
-	HANDLE hFile = WinFile::Open(fileName, FileOpenMode::READONLY);
-	return WinFile::FileSize(hFile);
+	TCHAR tFileName[MAX_PATH];
+	ctow(fileName, tFileName);
+	HANDLE hFile = Open(tFileName, FileOpenMode::READONLY);
+	size_lt size = FileSize(hFile);
+	Close(hFile);
+	return size;
 }
 
 size_lt WinFile::Seek(size_lt offset, SeekReference move)
@@ -187,7 +202,7 @@ size_lt WinFile::Seek(size_lt offset, SeekReference move)
 	LARGE_INTEGER ps, FilePos;
 	ps.QuadPart = (size_lt)offset;
 
-	long res = SetFilePointerEx(this->hFile, ps, (PLARGE_INTEGER)&FilePos, move);
+	long res = SetFilePointerEx(_hFile, ps, (PLARGE_INTEGER)&FilePos, move);
 	if (res == INVALID_SET_FILE_POINTER)
 	{
 		ThrowFileExceptionWithCode("Can't set pointer in file on new position!", GetLastError());
@@ -200,7 +215,7 @@ int WinFile::ReadByte()
 {
 	char b;
 	int readedByte;
-	bool res = ReadFile(this->hFile, (LPVOID)&b, 1, (LPDWORD)&readedByte, NULL);
+	bool res = ReadFile(_hFile, (LPVOID)&b, 1, (LPDWORD)&readedByte, NULL);
 	if (!res)
 	{
 		ThrowFileExceptionWithCode("Can't read data from file!", GetLastError());
@@ -215,7 +230,7 @@ int WinFile::ReadByte()
 
 size_lt WinFile::ReadBlock(byte *block, size_lt blockSize)
 {
-	return this->ReadBlock(this->hFile, block, blockSize);
+	return ReadBlock(_hFile, block, blockSize);
 }
 
 size_lt WinFile::ReadBlock(HANDLE hFile, byte *block, size_lt blockSize)
@@ -231,12 +246,12 @@ size_lt WinFile::ReadBlock(HANDLE hFile, byte *block, size_lt blockSize)
 
 void WinFile::WriteByte(byte b)
 {
-	this->WriteBlock(&b, 1);
+	WriteBlock(&b, 1);;
 }
 
 void WinFile::WriteBlock(byte *block, size_lt sizeBlock)
 {
-	this->WriteBlock(this->hFile, block, sizeBlock);
+	WriteBlock(_hFile, block, sizeBlock);
 }
 
 void WinFile::WriteBlock(HANDLE hFile, byte * block, size_lt sizeBlock)
@@ -251,8 +266,11 @@ void WinFile::WriteBlock(HANDLE hFile, byte * block, size_lt sizeBlock)
 
 size_lt WinFile::ReadAllBytes(const char *fileName, byte **block)
 {
-	HANDLE hFile = Open(fileName, FileOpenMode::READONLY);
-	size_lt fSize = FileSize(fileName);
+	TCHAR tFileName[MAX_PATH];
+	ctow(fileName, tFileName);
+
+	HANDLE hFile = Open(tFileName, FileOpenMode::READONLY);
+	size_lt fSize = FileSize(hFile);
 	byte *blockT = new byte[fSize];
 	if (!blockT)
 	{
@@ -261,12 +279,15 @@ size_lt WinFile::ReadAllBytes(const char *fileName, byte **block)
 
 	fSize = WinFile::ReadBlock(hFile, blockT, fSize);
 	*block = blockT;
+	Close(hFile);
 	return fSize;
 }
 
 void WinFile::WriteAllBytes(const char *fileName, byte * data, size_lt size, FileOpenMode mode)
 {
-	HANDLE hFile = Open(fileName, mode);
+	TCHAR tFileName[MAX_PATH];
+	ctow(fileName, tFileName);
+	HANDLE hFile = Open(tFileName, mode);
 	WinFile::WriteBlock(hFile, data, size);
 	Close(hFile);
 }

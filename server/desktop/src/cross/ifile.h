@@ -29,10 +29,11 @@ typedef struct
 /// Opening file rule
 typedef enum
 {
-	READONLY,		///< Open in READ ONLY mode
-	WRITEONEXISTS,	///< Write in end of the existing file or create new file
-	WRITE,			///< Create new file to write (or truncate existing file to write after)
-	READWRITE		///< Open file for reading and writing (will truncate existing file)
+	READONLY,		///< Open existing file in READ ONLY mode
+	WRITENEWFILE,	///< Creates new file 
+	WRITE,			///< Open existing file to write (or truncate existing file to write after)
+	READWRITE,		///< Open file for reading and writing (will truncate existing file)
+	WRRITEATTEHEND	///< Write in end of the existing file or create new file
 } FileOpenMode;
 
 /// Position used as reference for the offset.
@@ -61,6 +62,13 @@ public:
 	\param[in] mode Mode to open file (list of possibles modes defined in ifile.h).
 	*/
 	virtual void Open(FileOpenMode mode) = 0;
+
+	/*!
+	Opens file in predetermined mode. Previous opened file will be closed.
+	\param[in] fileName Set name of file to be open.
+	\param[in] mode Mode to open file (list of possibles modes defined in ifile.h).
+	*/
+	virtual void Open(const char *fileName, FileOpenMode mode) = 0;
 
 	/*!
 	Closes file descriptor.

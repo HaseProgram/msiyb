@@ -89,6 +89,10 @@ size_lt ConvertStringArrayToByte(byte** byteArr, string *str, size_lt cnt)
 
 void ctow(const char *str, wchar_t *wStr)
 {
+#ifdef _UNICODE
 	int len = strlen(str) + 2;
 	mbstowcs(wStr, str, len);
+#else
+	strcpy(wStr, str);
+#endif
 }

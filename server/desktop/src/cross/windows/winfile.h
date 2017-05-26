@@ -45,12 +45,19 @@ public:
 	virtual void Open(FileOpenMode mode) override;
 
 	/*!
+	Open file.
+	\param[in] fileName Name of file to open.
+	\param[in] mode Depends mode in which file will be opened.
+	*/
+	virtual void Open(const char *fileName, FileOpenMode mode) override;
+
+	/*!
 	Open file. Static.
 	\param[in] fileName Name of file to open.
 	\param[in] mode Depends mode in which file will be opened.
 	\return Handle of file
 	*/
-	static HANDLE Open(const char *fileName, FileOpenMode mode);
+	static HANDLE Open(const TCHAR *fileName, FileOpenMode mode);
 
 	/*!
 	Closes file descriptor.
@@ -94,7 +101,7 @@ public:
 	\param[in] wFileName Name of file.
 	\return TRUE if file exists, FALSE in other case.
 	*/
-	static bool Exist(const wchar_t *wFileName);
+	static bool Exist(const TCHAR *tFileName);
 
 	/*!
 	Deletes file.
@@ -111,7 +118,7 @@ public:
 	Deletes file. Static.
 	\param[in] fileName Name of file.
 	*/
-	static void Delete(const wchar_t *wFileName);
+	static void Delete(const TCHAR *tFileName);
 
 	/*!
 	Return size of file.
@@ -204,7 +211,7 @@ public:
 	\param[in] size Size of data buffer.
 	\param[in] mode Open file mode.
 	*/
-	static void WriteAllBytes(const char *fileName, byte* data, size_lt size, FileOpenMode mode = WRITEONEXISTS);
+	static void WriteAllBytes(const char *fileName, byte* data, size_lt size, FileOpenMode mode = WRITENEWFILE);
 
 	/*!
 	\TODO
@@ -215,8 +222,8 @@ public:
 	static FileMeta LastModified(const char *fileName);
 
 private:
-	HANDLE hFile;			///< Handle of opened file
-	char *fileName;			///< Name of file
-	wchar_t *wFileName;		///< Name of file in unicode charset
-	bool opened;			///< Determine is file open or not
+	HANDLE _hFile;			///< Handle of opened file
+	char *_fileName;		///< Name of file
+	WCHAR *_tFileName;		///< Name of file in unicode charset
+	bool _opened;			///< Determine is file open or not
 };
