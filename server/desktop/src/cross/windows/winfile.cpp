@@ -23,7 +23,7 @@ WinFile::WinFile(const char *fileName)
 	}
 
 	strcpy(_fileName, fileName);
-	ctow(fileName, _tFileName);
+	ConvertCharToTCHAR(fileName, _tFileName);
 	_opened = false;
 }
 
@@ -40,20 +40,20 @@ WinFile::~WinFile()
 
 void WinFile::Open(FileOpenMode mode)
 {
-	ctow(_fileName, _tFileName);
-	_hFile = Open(_tFileName, mode);
+	ConvertCharToTCHAR(_fileName, _tFileName);
+	_hFile = tOpen(_tFileName, mode);
 	_opened = true;
 }
 
 void WinFile::Open(const char *fileName, FileOpenMode mode)
 {
 	strcpy(_fileName, fileName);
-	ctow(_fileName, _tFileName);
-	_hFile = Open(_tFileName, mode);
+	ConvertCharToTCHAR(_fileName, _tFileName);
+	_hFile = tOpen(_tFileName, mode);
 	_opened = true;
 }
 
-HANDLE WinFile::Open(const TCHAR *fileName, FileOpenMode mode)
+HANDLE WinFile::tOpen(const TCHAR *fileName, FileOpenMode mode)
 {
 	DWORD creationDisposition = OPEN_EXISTING;
 	DWORD desiredAccess;
@@ -107,7 +107,7 @@ void WinFile::Rename(const char *newFileName)
 {
 	Rename(_fileName, newFileName);
 
-	ctow(newFileName, _tFileName);
+	ConvertCharToTCHAR(newFileName, _tFileName);
 	strcpy(_fileName, newFileName);
 }
 
@@ -115,8 +115,8 @@ void WinFile::Rename(const char *fileName, const char * newFileName)
 {
 	TCHAR tFileName[MAX_PATH];
 	TCHAR tNewFileName[MAX_PATH];
-	ctow(fileName, tFileName);
-	ctow(newFileName, tNewFileName);
+	ConvertCharToTCHAR(fileName, tFileName);
+	ConvertCharToTCHAR(newFileName, tNewFileName);
 
 	if (!MoveFileEx(tFileName, tNewFileName, MOVEFILE_COPY_ALLOWED))
 	{
@@ -126,17 +126,17 @@ void WinFile::Rename(const char *fileName, const char * newFileName)
 
 bool WinFile::Exist()
 {
-	return Exist(_tFileName);
+	return tExist(_tFileName);
 }
 
 bool WinFile::Exist(const char *fileName)
 {
 	TCHAR tFileName[MAX_PATH];
-	ctow(fileName, tFileName);
-	return WinFile::Exist(tFileName);
+	ConvertCharToTCHAR(fileName, tFileName);
+	return WinFile::tExist(tFileName);
 }
 
-bool WinFile::Exist(const TCHAR *tFileName)
+bool WinFile::tExist(const TCHAR *tFileName)
 {
 	WIN32_FIND_DATA FindFileData;
 	HANDLE handle = FindFirstFile(tFileName, &FindFileData);
@@ -154,17 +154,17 @@ void WinFile::Delete()
 	{
 		Close(_hFile);
 	}
-	Delete(_tFileName);
+	tDelete(_tFileName);
 }
 
 void WinFile::Delete(const char *fileName)
 {
 	TCHAR tFileName[MAX_PATH];
-	ctow(fileName, tFileName);
-	WinFile::Delete(tFileName);
+	ConvertCharToTCHAR(fileName, tFileName);
+	WinFile::tDelete(tFileName);
 }
 
-void WinFile::Delete(const TCHAR *tFileName)
+void WinFile::tDelete(const TCHAR *tFileName)
 {
 	if (!DeleteFile(tFileName))
 	{
@@ -190,8 +190,8 @@ size_lt WinFile::FileSize(HANDLE hFile)
 size_lt WinFile::FileSize(const char *fileName)
 {
 	TCHAR tFileName[MAX_PATH];
-	ctow(fileName, tFileName);
-	HANDLE hFile = Open(tFileName, FileOpenMode::READONLY);
+	ConvertCharToTCHAR(fileName, tFileName);
+	HANDLE hFile = tOpen(tFileName, FileOpenMode::READONLY);
 	size_lt size = FileSize(hFile);
 	Close(hFile);
 	return size;
@@ -267,9 +267,9 @@ void WinFile::WriteBlock(HANDLE hFile, byte * block, size_lt sizeBlock)
 size_lt WinFile::ReadAllBytes(const char *fileName, byte **block)
 {
 	TCHAR tFileName[MAX_PATH];
-	ctow(fileName, tFileName);
+	ConvertCharToTCHAR(fileName, tFileName);
 
-	HANDLE hFile = Open(tFileName, FileOpenMode::READONLY);
+	HANDLE hFile = tOpen(tFileName, FileOpenMode::READONLY);
 	size_lt fSize = FileSize(hFile);
 	byte *blockT = new byte[fSize];
 	if (!blockT)
@@ -286,8 +286,8 @@ size_lt WinFile::ReadAllBytes(const char *fileName, byte **block)
 void WinFile::WriteAllBytes(const char *fileName, byte * data, size_lt size, FileOpenMode mode)
 {
 	TCHAR tFileName[MAX_PATH];
-	ctow(fileName, tFileName);
-	HANDLE hFile = Open(tFileName, mode);
+	ConvertCharToTCHAR(fileName, tFileName);
+	HANDLE hFile = tOpen(tFileName, mode);
 	WinFile::WriteBlock(hFile, data, size);
 	Close(hFile);
 }

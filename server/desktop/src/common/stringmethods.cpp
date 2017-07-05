@@ -87,12 +87,20 @@ size_lt ConvertStringArrayToByte(byte** byteArr, string *str, size_lt cnt)
 	return countBytes;
 }
 
-void ctow(const char *str, wchar_t *wStr)
+void ConvertCharToTCHAR(const char *cStr, TCHAR *tStr)
 {
 #ifdef _UNICODE
-	int len = strlen(str) + 2;
-	mbstowcs(wStr, str, len);
+	mbstowcs((wchar_t*)tStr, cStr, strlen(cStr) + 1);
 #else
-	strcpy(wStr, str);
+	strcpy(tStr, cStr);
+#endif
+}
+
+void ConvertTCHARToChar(TCHAR *tStr, char *cStr)
+{
+#ifdef _UNICODE
+	wcstombs(cStr, (wchar_t*)tStr, wcslen((wchar_t*)tStr) + 1);
+#else
+	strcpy(cStr, tStr);
 #endif
 }

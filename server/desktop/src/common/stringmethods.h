@@ -57,8 +57,15 @@ Convert array of strings into byte array
 size_lt ConvertStringArrayToByte(byte** byteArr, string *str, size_lt cnt);
 
 /*!
-Convert char string into wchar.
-\param[in] str Char string.
-\param[out] wStr Wchar string.
+Convert char string into tchar.
+\param[in] cStr char string.
+\param[out] tStr tchar string.
 */
-void ctow(const char *str, wchar_t *wStr);
+void ConvertCharToTCHAR(const char *cStr, TCHAR *tStr);
+
+/*!
+Convert tchar string into char.
+\param[in] tStr tchar string.
+\param[out] cStr char string.
+*/
+void ConvertTCHARToChar(TCHAR *tStr, char *cStr);

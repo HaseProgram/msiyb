@@ -48,8 +48,13 @@ public:
 	*/
 	~File();
 
-
+	/*!
+	Opens file in predetermined mode.
+	\param[in] fileName Name of file to work with.
+	\param[in] mode Mode to open file (list of possibles modes defined in ifile.h).
+	*/
 	void Open(const char *fileName, FileOpenMode mode);
+
 	/*!
 	Opens file in predetermined mode.
 	\param[in] mode Mode to open file (list of possibles modes defined in ifile.h).
