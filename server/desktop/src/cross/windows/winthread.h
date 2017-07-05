@@ -12,8 +12,6 @@
 #include "../ithread.h"
 #include "windows.h"
 
-using namespace std;
-
 /*!
 \class WinThread winthread.h "server\desktop\src\cross\windows\winthread.h"
 \brief  Windows depended structure of thread.
@@ -52,7 +50,7 @@ public:
 	\param[in] threadFlags The flags that control the creation of the thread.
 	\param[in] threadSecurityAttributes Determines if returned handle can be inherited by child.
 	*/
-	virtual void Init(void* threadFunc, void* threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes);
+	virtual void Init(void* threadFunc, void* threadFuncArgs, size_t threadStackSize, t_flags threadFlags, t_secattr threadSecurityAttributes) override;
 
 	/*!
 	Returns maximum amount of threads can be launched. Static.

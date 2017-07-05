@@ -147,12 +147,15 @@
   <ItemGroup>
     <ClInclude Include="common\dir.h" />
     <ClInclude Include="common\file.h" />
+    <ClInclude Include="common\mutex.h" />
     <ClInclude Include="common\stringmethods.h" />
     <ClInclude Include="common\thread.h" />
     <ClInclude Include="cross\ifile.h" />
+    <ClInclude Include="cross\imutex.h" />
     <ClInclude Include="cross\isocket.h" />
     <ClInclude Include="cross\ithread.h" />
     <ClInclude Include="cross\windows\winfile.h" />
+    <ClInclude Include="cross\windows\winmutex.h" />
     <ClInclude Include="cross\windows\winsocket.h" />
     <ClInclude Include="cross\windows\winthread.h" />
     <ClInclude Include="defines.h" />
@@ -163,12 +166,14 @@
     <ClInclude Include="tools\exception.h" />
     <ClInclude Include="tools\exceptions\direxception.h" />
     <ClInclude Include="tools\exceptions\fileexception.h" />
+    <ClInclude Include="tools\exceptions\mutexexception.h" />
     <ClInclude Include="tools\exceptions\socketexception.h" />
-    <ClInclude Include="tools\exceptions\thredexception.h" />
+    <ClInclude Include="tools\exceptions\threadexception.h" />
     <ClInclude Include="tools\logger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\file.cpp" />
+    <ClCompile Include="common\mutex.cpp" />
     <ClCompile Include="common\stringmethods.cpp" />
     <ClCompile Include="common\thread.cpp" />
     <ClCompile Include="cross\windows\winfile.cpp" />

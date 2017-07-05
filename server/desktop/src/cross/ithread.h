@@ -9,7 +9,7 @@
 
 #pragma once
 #include "../defines.h"
-#include "../tools/exceptions/thredexception.h"
+#include "../tools/exceptions/threadexception.h"
 
 /// Security attributes
 typedef enum

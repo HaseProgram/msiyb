@@ -87,14 +87,26 @@
     <ClInclude Include="tools\exceptions\socketexception.h">
       <Filter>Заголовочные файлы\tools\exception</Filter>
     </ClInclude>
-    <ClInclude Include="tools\exceptions\thredexception.h">
-      <Filter>Заголовочные файлы\tools\exception</Filter>
-    </ClInclude>
     <ClInclude Include="server.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="defines.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mutex.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\mutexexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\imutex.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\threadexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\winmutex.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +135,9 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="server.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="common\mutex.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
