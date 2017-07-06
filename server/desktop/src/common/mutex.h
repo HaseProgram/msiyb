@@ -37,8 +37,16 @@ public:
 	*/
 	~Mutex();
 
-	
-
 private:
+	/*!
+	Locks the mutex. Blocks if mutex is not available.
+	*/
+	void Lock();
+
+	/*!
+	Unlocks the mutex.
+	*/
+	void Unlock();
+	
 	OSMutex *_mutex;		///< OS depended mutex structure.
 };

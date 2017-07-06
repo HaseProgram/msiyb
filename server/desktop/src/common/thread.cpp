@@ -34,5 +34,5 @@ bool Thread::IsCompleted()
 
 int Thread::GetMaxThreadCount()
 {
-	OSThread::GetMaxThreadCount();
+	return OSThread::GetMaxThreadCount();
 }

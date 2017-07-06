@@ -28,7 +28,7 @@ public:
 	WinThread();
 
 	/*!
-	Clears handle array.
+	Clears handle.
 	*/
 	~WinThread();
 
@@ -78,16 +78,16 @@ public:
 	virtual bool CheckActive(void *result = nullptr) override;
 
 private:	
-	HANDLE hThread;		///< Handle of thread.
+	HANDLE _hThread;		///< Handle of thread.
 	
 	/* Thread creation parameters */
-	LPSECURITY_ATTRIBUTES threadSecurityAttributes;	///< Determines if returned handle can be inherited by child.
-	SIZE_T threadStackSize;							///< The initial size of the stack, in bytes.
-	LPTHREAD_START_ROUTINE threadFunc;				///< Pointer to a function to be executed by the thread.
-	LPVOID threadFuncArgs;							///< A pointer to a variable to be passed to the thread.
-	DWORD threadFlags;								///< The flags that control the creation of the thread.
+	LPSECURITY_ATTRIBUTES _threadSecurityAttributes;	///< Determines if returned handle can be inherited by child.
+	SIZE_T _threadStackSize;							///< The initial size of the stack, in bytes.
+	LPTHREAD_START_ROUTINE _threadFunc;				///< Pointer to a function to be executed by the thread.
+	LPVOID _threadFuncArgs;							///< A pointer to a variable to be passed to the thread.
+	DWORD _threadFlags;								///< The flags that control the creation of the thread.
 
-	DWORD threadSystemID;		///< Launched threadID
-	LPDWORD exitCode;			///< Recive the thread termination status
+	DWORD _threadSystemID;		///< Launched threadID
+	LPDWORD _exitCode;			///< Recive the thread termination status
 
 };

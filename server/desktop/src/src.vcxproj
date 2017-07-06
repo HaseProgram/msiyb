@@ -154,6 +154,8 @@
     <ClInclude Include="cross\imutex.h" />
     <ClInclude Include="cross\isocket.h" />
     <ClInclude Include="cross\ithread.h" />
+    <ClInclude Include="cross\threadsecurity.h" />
+    <ClInclude Include="cross\windows\unicodeconverter.h" />
     <ClInclude Include="cross\windows\winfile.h" />
     <ClInclude Include="cross\windows\winmutex.h" />
     <ClInclude Include="cross\windows\winsocket.h" />
@@ -176,7 +178,9 @@
     <ClCompile Include="common\mutex.cpp" />
     <ClCompile Include="common\stringmethods.cpp" />
     <ClCompile Include="common\thread.cpp" />
+    <ClCompile Include="cross\windows\unicodeconverter.cpp" />
     <ClCompile Include="cross\windows\winfile.cpp" />
+    <ClCompile Include="cross\windows\winmutex.cpp" />
     <ClCompile Include="cross\windows\winsocket.cpp" />
     <ClCompile Include="cross\windows\winthread.cpp" />
     <ClCompile Include="main.cpp" />

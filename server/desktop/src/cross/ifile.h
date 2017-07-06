@@ -8,14 +8,9 @@
 */
 
 #pragma once
-
-#define MIN_BUFFER_SIZE 128
-#define FILE_BUFFER_SIZE 1024
-#define MIN_STRING_SIZE 128
-#define MIN_STRING_ARRAY_SIZE 2
-
-#include "../defines.h"
-#include "../tools/exceptions/fileexception.h"
+#include "..\defines.h"
+#include "windows\unicodeconverter.h"
+#include "..\tools\exceptions\fileexception.h"
 
 /// File meta data structure
 typedef struct

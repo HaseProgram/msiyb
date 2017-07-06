@@ -13,3 +13,12 @@ Mutex::~Mutex()
 {
 	delete _mutex;
 }
+
+void Mutex::Lock()
+{
+
+}
+
+void Mutex::Unlock()
+{
+}
