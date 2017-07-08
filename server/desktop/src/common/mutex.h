@@ -10,7 +10,7 @@
 #pragma once
 
 #ifdef _WIN32
-#include "../cross/windows/winmutex.h"
+#include "../cross/windows/threadlock/winmutex.h"
 typedef WinMutex OSMutex;
 #elif _unix_
 #include "../cross/unix/unixmutex.h"

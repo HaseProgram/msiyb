@@ -3,36 +3,36 @@
 #include "../exception.h"
 
 #ifdef DEBUG
-#define ThrowMutexException(msg)											\
+#define ThrowLockerException(msg)											\
 {																			\
-	throw MutexException(msg, __FILE__, __FUNCTION__, __LINE__);			\
+	throw LockerException(msg, __FILE__, __FUNCTION__, __LINE__);			\
 }
 
-#define ThrowMutexExceptionWithCode(msg, code)								\
+#define ThrowLockerExceptionWithCode(msg, code)								\
 {																			\
-	throw MutexException(msg, __FILE__, __FUNCTION__, __LINE__, code);		\
+	throw LockerException(msg, __FILE__, __FUNCTION__, __LINE__, code);		\
 }
 #else
-#define ThrowMutexException(msg)											\
+#define ThrowLockerException(msg)											\
 {																			\
-	throw MutexException(msg);												\
+	throw LockerException(msg);												\
 }																	
-#define void ThrowMutexExceptionWithCode(msg, code)							\
+#define void ThrowLockerExceptionWithCode(msg, code)							\
 {																			\
-	throw MutexException(msg, code);										\
+	throw LockerException(msg, code);										\
 }
 #endif
 
-class MutexException : public Exception
+class LockerException : public Exception
 {
 public:
-	MutexException(const char* message, const char *file, const char *function, int line, long errCode)
+	LockerException(const char* message, const char *file, const char *function, int line, long errCode)
 	{
 		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n Error code: %\n", file, function, line, message, errCode);
 		this->errCode = errCode;
 	}
 
-	MutexException(const char* message, const char *file, const char *function, int line)
+	LockerException(const char* message, const char *file, const char *function, int line)
 	{
 		sprintf(this->message, "In file %s function %s line %d error occured.\n Error message: %s\n", file, function, line, message);
 		this->errCode = -1;
@@ -43,7 +43,7 @@ public:
 		return message;
 	}
 
-	void operator = (const MutexException &fE)
+	void operator = (const LockerException &fE)
 	{
 		strcpy(message, fE.what());
 		errCode = fE.GetErrorCode();

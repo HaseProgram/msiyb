@@ -5,7 +5,7 @@ Mutex::Mutex()
 	_mutex = new OSMutex();
 	if (!_mutex)
 	{
-		ThrowMutexExceptionWithCode("Can't allocate memory for OS mutex!", GetLastError());
+		ThrowLockerExceptionWithCode("Can't allocate memory for OS mutex!", GetLastError());
 	}
 }
 

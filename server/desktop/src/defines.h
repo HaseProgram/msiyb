@@ -9,6 +9,7 @@ typedef size_t size_lt;
 #define FILE_BUFFER_SIZE 1024
 #define MIN_STRING_SIZE 128
 #define MIN_STRING_ARRAY_SIZE 2
+#define INFINITE            0xFFFFFFFF
 
 #ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS

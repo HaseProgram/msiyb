@@ -2,6 +2,7 @@
 
 WinMutex::WinMutex()
 {
+
 }
 
 WinMutex::WinMutex(t_secattr mutexAttr, bool initialOwner, char* name)
@@ -20,8 +21,9 @@ WinMutex::~WinMutex()
 {
 }
 
-void WinMutex::Init(t_secattr mutexAttr, bool initialOwner, char* name)
+void WinMutex::Init(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout)
 {
+	_timeout = timeout;
 	LPSECURITY_ATTRIBUTES securityAttr;
 	switch (mutexAttr)
 	{
@@ -34,8 +36,9 @@ void WinMutex::Init(t_secattr mutexAttr, bool initialOwner, char* name)
 	Init(securityAttr, initialOwner, tName);
 }
 
-void WinMutex::Init(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name)
+void WinMutex::Init(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name, unsigned long timeout)
 {
+	_timeout = timeout;
 	_mutexAttr = mutexAttr;
 	_initialOwner = initialOwner;
 	_name = name;
@@ -50,13 +53,13 @@ void WinMutex::Create()
 	);
 }
 
-bool WinMutex::Lock(unsigned long timeout)
+bool WinMutex::Lock()
 {
-	unsigned long event = WaitForSingleObject(_hMutex, timeout);
+	unsigned long event = WaitForSingleObject(_hMutex, _timeout);
 	switch(event)
 	{
 	case WAIT_FAILED:
-		ThrowMutexExceptionWithCode("Can't lock mutex.", GetLastError());
+		ThrowLockerExceptionWithCode("Can't lock mutex.", GetLastError());
 		break;
 	case WAIT_OBJECT_0:
 		return true;
@@ -71,7 +74,7 @@ bool WinMutex::Unlock()
 {
 	if (ReleaseMutex(_hMutex) != 0)
 	{
-		ThrowMutexExceptionWithCode("Can't unlock mutex.", GetLastError());
+		ThrowLockerExceptionWithCode("Can't unlock mutex.", GetLastError());
 	}
 	return true;
 }
