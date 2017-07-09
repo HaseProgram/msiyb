@@ -96,9 +96,6 @@
     <ClInclude Include="defines.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="common\mutex.h">
-      <Filter>Заголовочные файлы\common</Filter>
-    </ClInclude>
     <ClInclude Include="tools\exceptions\threadexception.h">
       <Filter>Заголовочные файлы\tools\exception</Filter>
     </ClInclude>
@@ -122,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="cross\windows\winlocker.h">
       <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\wincriticalsection.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +152,6 @@
     <ClCompile Include="server.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="common\mutex.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="cross\windows\unicodeconverter.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -165,6 +162,9 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="cross\windows\winlocker.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\wincriticalsection.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,9 +1,16 @@
 #include "winlocker.h"
 
-ILocker* WinLocker::GetLocker(unsigned long timeout, bool oneProcess, bool useTry)
+ILocker* WinLocker::GetLocker(bool useTry, bool oneProcess, unsigned long timeout, t_secattr security, bool initialOwner, char* name)
 {
-	if (oneProcess)
+	if (!oneProcess)
 	{
-		return (ILocker*)new WinMutex();
+		return (ILocker*) new WinMutex(timeout);
 	}
+
+	if (!useTry)
+	{
+		// return (ILocker*) new WinSRWLock();
+	}
+
+	return (ILocker*) new WinCriticalSection(timeout);
 }

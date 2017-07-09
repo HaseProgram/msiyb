@@ -148,7 +148,6 @@
     <ClInclude Include="common\dir.h" />
     <ClInclude Include="common\file.h" />
     <ClInclude Include="common\locker.h" />
-    <ClInclude Include="common\mutex.h" />
     <ClInclude Include="common\stringmethods.h" />
     <ClInclude Include="common\thread.h" />
     <ClInclude Include="cross\ifile.h" />
@@ -156,6 +155,7 @@
     <ClInclude Include="cross\isocket.h" />
     <ClInclude Include="cross\ithread.h" />
     <ClInclude Include="cross\threadsecurity.h" />
+    <ClInclude Include="cross\windows\threadlock\wincriticalsection.h" />
     <ClInclude Include="cross\windows\threadlock\winmutex.h" />
     <ClInclude Include="cross\windows\unicodeconverter.h" />
     <ClInclude Include="cross\windows\winfile.h" />
@@ -178,9 +178,9 @@
   <ItemGroup>
     <ClCompile Include="common\file.cpp" />
     <ClCompile Include="common\locker.cpp" />
-    <ClCompile Include="common\mutex.cpp" />
     <ClCompile Include="common\stringmethods.cpp" />
     <ClCompile Include="common\thread.cpp" />
+    <ClCompile Include="cross\windows\threadlock\wincriticalsection.cpp" />
     <ClCompile Include="cross\windows\threadlock\winmutex.cpp" />
     <ClCompile Include="cross\windows\unicodeconverter.cpp" />
     <ClCompile Include="cross\windows\winfile.cpp" />

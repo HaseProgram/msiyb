@@ -1,24 +1,52 @@
 #include "winmutex.h"
 
-WinMutex::WinMutex()
+WinMutex::WinMutex(unsigned long timeout)
 {
-
+	_timeout = timeout;
 }
 
-WinMutex::WinMutex(t_secattr mutexAttr, bool initialOwner, char* name)
+WinMutex::WinMutex(const WinMutex& other)
 {
-	Init(mutexAttr, initialOwner, name);
+	_hMutex = other._hMutex;
+	_mutexAttr = other._mutexAttr;
+	_initialOwner = other._initialOwner;
+	_name = other._name;
+	_timeout = other._timeout;
+}
+
+WinMutex::WinMutex(WinMutex&& other)
+{
+	_hMutex = other._hMutex;
+	_mutexAttr = other._mutexAttr;
+	_initialOwner = other._initialOwner;
+	_name = other._name;
+	_timeout = other._timeout;
+}
+
+WinMutex::WinMutex(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout)
+{
+	Init(mutexAttr, initialOwner, name, timeout);
 	Create();
 }
 
-WinMutex::WinMutex(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name)
+WinMutex::WinMutex(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name, unsigned long timeout)
 {
-	Init(mutexAttr, initialOwner, name);
+	Init(mutexAttr, initialOwner, name, timeout);
 	Create();
 }
 
 WinMutex::~WinMutex()
 {
+}
+
+WinMutex & WinMutex::operator=(const WinMutex & other)
+{
+	_hMutex = other._hMutex;
+	_mutexAttr = other._mutexAttr;
+	_initialOwner = other._initialOwner;
+	_name = other._name;
+	_timeout = other._timeout;
+	return *this;
 }
 
 void WinMutex::Init(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout)
@@ -55,8 +83,26 @@ void WinMutex::Create()
 
 bool WinMutex::Lock()
 {
-	unsigned long event = WaitForSingleObject(_hMutex, _timeout);
-	switch(event)
+	return WaitEventResponse(WaitForSingleObject(_hMutex, _timeout));
+}
+
+bool WinMutex::TryLock()
+{
+	return WaitEventResponse(WaitForSingleObject(_hMutex, 0));
+}
+
+bool WinMutex::Unlock()
+{
+	if (ReleaseMutex(_hMutex) != 0)
+	{
+		ThrowLockerExceptionWithCode("Can't unlock mutex.", GetLastError());
+	}
+	return true;
+}
+
+bool WinMutex::WaitEventResponse(unsigned long event)
+{
+	switch (event)
 	{
 	case WAIT_FAILED:
 		ThrowLockerExceptionWithCode("Can't lock mutex.", GetLastError());
@@ -68,13 +114,4 @@ bool WinMutex::Lock()
 		return false;
 		break;
 	}
-}
-
-bool WinMutex::Unlock()
-{
-	if (ReleaseMutex(_hMutex) != 0)
-	{
-		ThrowLockerExceptionWithCode("Can't unlock mutex.", GetLastError());
-	}
-	return true;
 }
