@@ -10,7 +10,7 @@ Locker::~Locker()
 	_locker.Unlock(); 
 }
 
-ILocker* Locker::GetLocker(bool useTry, bool oneProcess, unsigned long timeout, t_secattr security, bool initialOwner, char* name)
+ILocker* Locker::GetLocker(LockerAttr attributes)
 {
-	return OSLocker::GetLocker(useTry, oneProcess, timeout, security, initialOwner, name);
+	return OSLocker::GetLocker(attributes);
 }

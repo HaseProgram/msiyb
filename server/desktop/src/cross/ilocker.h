@@ -8,9 +8,37 @@
 */
 
 #pragma once
+
 #include "../defines.h"
 #include "threadsecurity.h"
 #include "../tools/exceptions/lockerexception.h"
+
+/*!
+\struct LockerAttributes ilocker.h "server\desktop\src\cross\ilocker.h"
+\brief Locker attributes.
+*/
+typedef struct LockerAttributes
+{
+	bool useTry;			///< Define if user need TryLock() method.
+	bool oneProcess;		///< Define if locker will be used in one or many processes.
+	unsigned long timeout;	///< Timeout after which OS stop trying access locker object.
+	unsigned long SLC;		///< Amount of spinlock iterations before system switches in kernel mode.
+	t_secattr security;		///< Determines if handle can be inherited by child.
+	bool initialOwner;		///< Obtains initial ownership of the locker object.
+	char* name = NULL;		///< The name of the locker object.
+
+	/*!
+	Set initial values.
+	*/
+	LockerAttributes() :
+		useTry(false),
+		oneProcess(true),
+		timeout(INFINITE),
+		SLC(0),
+		security(t_secattr::ENULL),
+		initialOwner(FALSE),
+		name(NULL) {}
+} LockerAttr;
 
 /*!
 \class ILocker ilocker.h "server\desktop\src\cross\ilocker.h"

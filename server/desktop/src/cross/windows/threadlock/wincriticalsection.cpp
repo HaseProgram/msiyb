@@ -1,16 +1,14 @@
 #include "wincriticalsection.h"
 
-WinCriticalSection::WinCriticalSection(unsigned long timeout)
+WinCriticalSection::WinCriticalSection(unsigned long spinLockCount)
 {
-	_timeout = timeout;
-	_spinLockCount = 0;
+	_spinLockCount = spinLockCount;
 	_ready = false;
 	_inUse = 0;
 }
 
 WinCriticalSection::WinCriticalSection(const WinCriticalSection &other)
 {
-	_timeout = other._timeout;
 	_spinLockCount = other._spinLockCount;
 	_critical = other._critical;
 	_ready = other._ready;
@@ -18,7 +16,6 @@ WinCriticalSection::WinCriticalSection(const WinCriticalSection &other)
 
 WinCriticalSection::WinCriticalSection(WinCriticalSection&& other)
 {
-	_timeout = other._timeout;
 	_spinLockCount = other._spinLockCount;
 	_critical = other._critical;
 	_ready = other._ready;
@@ -26,7 +23,6 @@ WinCriticalSection::WinCriticalSection(WinCriticalSection&& other)
 
 WinCriticalSection& WinCriticalSection::operator=(const WinCriticalSection& other)
 {
-	_timeout = other._timeout;
 	_spinLockCount = other._spinLockCount;
 	_critical = other._critical;
 	_ready = other._ready;

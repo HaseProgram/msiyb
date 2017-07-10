@@ -83,9 +83,9 @@ private:
 	/* Thread creation parameters */
 	LPSECURITY_ATTRIBUTES _threadSecurityAttributes;	///< Determines if returned handle can be inherited by child.
 	SIZE_T _threadStackSize;							///< The initial size of the stack, in bytes.
-	LPTHREAD_START_ROUTINE _threadFunc;				///< Pointer to a function to be executed by the thread.
-	LPVOID _threadFuncArgs;							///< A pointer to a variable to be passed to the thread.
-	DWORD _threadFlags;								///< The flags that control the creation of the thread.
+	LPTHREAD_START_ROUTINE _threadFunc;					///< Pointer to a function to be executed by the thread.
+	LPVOID _threadFuncArgs;								///< A pointer to a variable to be passed to the thread.
+	DWORD _threadFlags;									///< The flags that control the creation of the thread.
 
 	DWORD _threadSystemID;		///< Launched threadID
 	LPDWORD _exitCode;			///< Recive the thread termination status

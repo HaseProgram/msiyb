@@ -14,17 +14,17 @@
 
 /*!
 \class WinCriticalSection wincriticalsection.h "server\desktop\src\cross\windows\threadlock\wincriticalsection.h"
-\brief  Windows depended structure of critical section.
-Provides windows-specified access to criticalsection.
+\brief  Structure of critical section.
+Provides access to critical section.
 */
 class WinCriticalSection : public ILocker
 {
 public:
 	/*!
-	Constructor. Set timeout.
-	\param[in] timeout Timeout after which OS stop trying access locker object.
+	Constructor. Set SpinLock count.
+	\param[in] spinLockCount Amount of spinlock iterations before system switches in kernel mode.
 	*/
-	WinCriticalSection(unsigned long timeout = INFINITE);
+	WinCriticalSection(unsigned long spinLockCount = 0);
 
 	/*!
 	Constructor copy
