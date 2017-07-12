@@ -72,7 +72,7 @@ public:
 	virtual bool Unlock() = 0;
 
 	/*!
-	Set timeout to try lock locker object.
+	Set timeout to try lock the locker object.
 	\param[in] timeout Timeout after which OS stop trying access locker object.
 	*/
 	void SetTimeout(unsigned long timeout) { _timeout = timeout; }

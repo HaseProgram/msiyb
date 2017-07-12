@@ -123,6 +123,9 @@
     <ClInclude Include="cross\windows\threadlock\wincriticalsection.h">
       <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
     </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\winsrwlock.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

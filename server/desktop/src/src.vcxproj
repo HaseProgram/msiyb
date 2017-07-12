@@ -157,6 +157,7 @@
     <ClInclude Include="cross\threadsecurity.h" />
     <ClInclude Include="cross\windows\threadlock\wincriticalsection.h" />
     <ClInclude Include="cross\windows\threadlock\winmutex.h" />
+    <ClInclude Include="cross\windows\threadlock\winsrwlock.h" />
     <ClInclude Include="cross\windows\unicodeconverter.h" />
     <ClInclude Include="cross\windows\winfile.h" />
     <ClInclude Include="cross\windows\winlocker.h" />
