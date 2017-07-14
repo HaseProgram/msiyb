@@ -64,12 +64,24 @@ public:
 	bool Lock() override;
 
 	/*!
+	Unavailable for critical section object.
+	\return FALSE
+	*/
+	bool LockShared() override;
+
+	/*!
 	Try to enter critical section.
 	If another thread has already entered,
 	function returns false immediatly.
 	\return TRUE if thread has entered critical section and FALSE in other case.
 	*/
 	bool TryLock() override;
+
+	/*!
+	Unavailable for critical section object.
+	\return FALSE
+	*/
+	bool TryLockShared() override;
 
 	/*!
 	Leaves the critical section, if it's active.

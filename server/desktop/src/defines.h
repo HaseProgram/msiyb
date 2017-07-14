@@ -12,6 +12,7 @@ typedef size_t size_lt;
 #define INFINITE            0xFFFFFFFF
 
 #ifdef _WIN32
+#include <VersionHelpers.h>
 #define _CRT_SECURE_NO_WARNINGS
 #define PATH_MAX _MAX_PATH
 #endif

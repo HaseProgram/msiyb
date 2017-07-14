@@ -101,12 +101,24 @@ public:
 	bool Lock() override;
 
 	/*!
+	Unavailable for mutex object.
+	\return FALSE
+	*/
+	bool LockShared() override;
+
+	/*!
 	Try to lock the mutex object.
 	If another thread has already locked the mutex,
 	function returns false immediatly.
 	\return TRUE if the state of specified object is signaled and FALSE if object already locked.
 	*/
 	bool TryLock() override;
+
+	/*!
+	Unavailable for mutex object.
+	\return FALSE
+	*/
+	bool TryLockShared() override;
 
 	/*
 	Unlocks the mutex.

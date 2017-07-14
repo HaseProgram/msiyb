@@ -31,8 +31,11 @@ WinCriticalSection& WinCriticalSection::operator=(const WinCriticalSection& othe
 
 WinCriticalSection::~WinCriticalSection()
 {
-	DeleteCriticalSection(&_critical);
-	_ready = false;
+	if (_ready)
+	{
+		DeleteCriticalSection(&_critical);
+		_ready = false;
+	}
 }
 
 void WinCriticalSection::Init(unsigned long spinLockCount)
@@ -52,6 +55,11 @@ bool WinCriticalSection::Lock()
 	return true;
 }
 
+bool WinCriticalSection::LockShared()
+{
+	return false;
+}
+
 bool WinCriticalSection::TryLock()
 {
 	Init();
@@ -60,6 +68,11 @@ bool WinCriticalSection::TryLock()
 		_inUse++;
 		return true;
 	}
+	return false;
+}
+
+bool WinCriticalSection::TryLockShared()
+{
 	return false;
 }
 

@@ -183,6 +183,7 @@
     <ClCompile Include="common\thread.cpp" />
     <ClCompile Include="cross\windows\threadlock\wincriticalsection.cpp" />
     <ClCompile Include="cross\windows\threadlock\winmutex.cpp" />
+    <ClCompile Include="cross\windows\threadlock\winsrwlock.cpp" />
     <ClCompile Include="cross\windows\unicodeconverter.cpp" />
     <ClCompile Include="cross\windows\winfile.cpp" />
     <ClCompile Include="cross\windows\winlocker.cpp" />

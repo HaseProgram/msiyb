@@ -13,13 +13,21 @@
 #include "threadsecurity.h"
 #include "../tools/exceptions/lockerexception.h"
 
+/// Define specified lock methods reuqirements.
+typedef enum
+{
+	EDEFAULT,	///< No special methods require.
+	EREC,		///< Require recursive lock method.
+	ESHARED		///< Require LockShared method.
+} additionalLock;
+
 /*!
 \struct LockerAttributes ilocker.h "server\desktop\src\cross\ilocker.h"
 \brief Locker attributes.
 */
 typedef struct LockerAttributes
 {
-	bool useTry;			///< Define if user need TryLock() method.
+	additionalLock al;		///< Define specified lock methods requirements.
 	bool oneProcess;		///< Define if locker will be used in one or many processes.
 	unsigned long timeout;	///< Timeout after which OS stop trying access locker object.
 	unsigned long SLC;		///< Amount of spinlock iterations before system switches in kernel mode.
@@ -31,10 +39,10 @@ typedef struct LockerAttributes
 	Set initial values.
 	*/
 	LockerAttributes() :
-		useTry(false),
+		al(additionalLock::EDEFAULT),
 		oneProcess(true),
 		timeout(INFINITE),
-		SLC(0),
+		SLC(50),
 		security(t_secattr::ENULL),
 		initialOwner(FALSE),
 		name(NULL) {}
@@ -50,12 +58,19 @@ class ILocker
 public:
 
 	/*!
-	Locks the locker object.
+	Locks the locker object. Exclusive lock.
 	If another thread has already locked the locker,
 	a call to lock will block execution until the lock is acquired.
 	\return TRUE if the state of specified object is signaled and FALSE in other case (ex. timeout).
 	*/
 	virtual bool Lock() = 0;
+
+	/*!
+	Locks the locker object in shared mode
+	so other reader thread can use it as well.
+	\return TRUE if shared is available and FALSE in other case (use Lock or TryLock).
+	*/
+	virtual bool LockShared() = 0;
 
 	/*!
 	Try to lock the locker object.
@@ -64,6 +79,14 @@ public:
 	\return TRUE if the state of specified object is signaled and FALSE if object already locked.
 	*/
 	virtual bool TryLock() = 0;
+
+	/*!
+	Try to lock the locker object in shared mode.
+	If the call is successful, the calling thread takes ownership of the lock.
+	function returns false immediatly.
+	\return TRUE if the state of specified object is signaled and FALSE if object already locked.
+	*/
+	virtual bool TryLockShared() = 0;
 
 	/*!
 	Unlocks the locker.

@@ -20,8 +20,7 @@ class WinSRWLock : public ILocker
 {
 public:
 	/*!
-	Constructor. Set timeout.
-	\param[in] timeout Timeout after which OS stop trying access locker object.
+	Constructor. Empty.
 	*/
 	WinSRWLock();
 
@@ -49,18 +48,40 @@ public:
 	~WinSRWLock();
 
 	/*!
-	Initialise critical section with specified attributes.
-	\param[in] spinLockCount Iteration amount of spinlock before OS switch into kernel mode.
+	Initialise SRW lock.
 	*/
-	void Init(unsigned long spinLockCount = 0);
+	void Init();
 
 	/*!
-	Enter the critical section.
+	Enter the SRW lock. Exclusive lock. (For writers).
 	If another thread has already locked the srwlock,
 	a call to lock will block execution until the lock is acquired.
 	\return always TRUE.
 	*/
 	bool Lock() override;
+
+	/*!
+	Locks the locker object in shared mode
+	so other reader thread can use it as well.
+	\return always TRUE.
+	*/
+	bool LockShared() override;
+
+	/*!
+	Try to enter critical section.
+	If another thread has already entered,
+	function returns false immediatly.
+	\return TRUE if thread has been locked and FALSE in other case.
+	*/
+	bool TryLock() override;
+
+	/*!
+	Try to lock the locker object in shared mode.
+	If the call is successful, the calling thread takes ownership of the lock.
+	function returns false immediatly.
+	\return TRUE if the state of specified object is signaled and FALSE if object already locked.
+	*/
+	bool TryLockShared() override;
 
 	/*!
 	Leaves the critical section, if it's active.
@@ -69,14 +90,8 @@ public:
 	bool Unlock() override;
 
 private:
-	/*!
-	SRW lock can not try to lock, so it's private
-	Empty.
-	\return false.
-	*/
-	bool TryLock() override;
-
-	bool _ready;				///< Flag is true if critical section was init.
-	CRITICAL_SECTION _critical;	///< Critical section speciment.
-	DWORD _spinLockCount;		///< Iteration amount of spinlock before OS switch into kernel mode.
+	volatile long _inUse;
+	volatile long _shared;		///< Flag of shared or exclusive. -1 - unlocked; 0 - shared; 1 - exclusive.
+	bool _ready;				///< Flag is true if srw lock was init.
+	SRWLOCK _srw;				///< SRW speciment.
 };

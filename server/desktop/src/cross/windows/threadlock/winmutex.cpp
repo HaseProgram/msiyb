@@ -86,9 +86,19 @@ bool WinMutex::Lock()
 	return WaitEventResponse(WaitForSingleObject(_hMutex, _timeout));
 }
 
+bool WinMutex::LockShared()
+{
+	return false;
+}
+
 bool WinMutex::TryLock()
 {
 	return WaitEventResponse(WaitForSingleObject(_hMutex, 0));
+}
+
+bool WinMutex::TryLockShared()
+{
+	return false;
 }
 
 bool WinMutex::Unlock()

@@ -170,5 +170,8 @@
     <ClCompile Include="cross\windows\threadlock\wincriticalsection.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\winsrwlock.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
