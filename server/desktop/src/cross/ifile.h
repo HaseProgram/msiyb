@@ -28,7 +28,7 @@ typedef enum
 	WRITENEWFILE,	///< Creates new file 
 	WRITE,			///< Open existing file to write (or truncate existing file to write after)
 	READWRITE,		///< Open file for reading and writing (will truncate existing file)
-	WRRITEATTEHEND	///< Write in end of the existing file or create new file
+	WRITEATTHEEND	///< Write in end of the existing file or create new file
 } FileOpenMode;
 
 /// Position used as reference for the offset.

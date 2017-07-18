@@ -4,7 +4,11 @@ WinSRWLock::WinSRWLock()
 {
 	_shared = -1;
 	_ready = false;
-	_inUse = FALSE;
+	TCHAR* moduleName;
+	ConvertCharToTCHAR("kernel32", moduleName);
+	HMODULE module = GetModuleHandle(moduleName);
+	_tryExPtr = (TrySrwLock)GetProcAddress(module, "TryAcquireSRWLockExclusive");
+	_tryShPtr = (TrySrwLock)GetProcAddress(module, "TryAcquireSRWLockShared");
 }
 
 WinSRWLock::WinSRWLock(const WinSRWLock &other)
@@ -12,7 +16,8 @@ WinSRWLock::WinSRWLock(const WinSRWLock &other)
 	_shared = other._shared;
 	_srw = other._srw;
 	_ready = other._ready;
-	_inUse = other._inUse;
+	_tryExPtr = other._tryExPtr;
+	_tryShPtr = other._tryShPtr;
 }
 
 WinSRWLock::WinSRWLock(WinSRWLock &&other)
@@ -20,7 +25,8 @@ WinSRWLock::WinSRWLock(WinSRWLock &&other)
 	_shared = other._shared;
 	_srw = other._srw;
 	_ready = other._ready;
-	_inUse = other._inUse;
+	_tryExPtr = other._tryExPtr;
+	_tryShPtr = other._tryShPtr;
 }
 
 WinSRWLock & WinSRWLock::operator=(const WinSRWLock &other)
@@ -28,7 +34,9 @@ WinSRWLock & WinSRWLock::operator=(const WinSRWLock &other)
 	_shared = other._shared;
 	_srw = other._srw;
 	_ready = other._ready;
-	_inUse = other._inUse;
+	_tryExPtr = other._tryExPtr;
+	_tryShPtr = other._tryShPtr;
+	return *this;
 }
 
 WinSRWLock::~WinSRWLock()
@@ -49,10 +57,65 @@ bool WinSRWLock::Lock()
 {
 	Init();
 	AcquireSRWLockExclusive(&_srw);
+	_shared = 0;
+	return true;
+}
+
+bool WinSRWLock::LockShared()
+{
+	Init();
+	AcquireSRWLockShared(&_srw);
+	_shared = 1;
 	return true;
 }
 
 bool WinSRWLock::TryLock()
 {
-	return false;
+	if (_tryExPtr != NULL)
+	{
+		bool res = _tryExPtr(&_srw);
+		if (res)
+		{
+			_shared = 0;
+		}
+		return res;
+	}
+	else
+	{
+		return false; // Maybe try use Interlocked functions...
+	}
+}
+
+bool WinSRWLock::TryLockShared()
+{
+	if (_tryShPtr != NULL)
+	{
+		bool res = _tryShPtr(&_srw);
+		if (res)
+		{
+			_shared = 1;
+		}
+		return res;
+	}
+	else
+	{
+		return false; // Maybe try use Interlocked functions...
+	}
+}
+
+bool WinSRWLock::Unlock()
+{
+	if (_shared == -1)
+	{
+		return false;
+	}
+	if (_shared == 0)
+	{
+		ReleaseSRWLockExclusive(&_srw);
+	}
+	if (_shared == 1)
+	{
+		ReleaseSRWLockShared(&_srw);
+	}
+	return true;
 }

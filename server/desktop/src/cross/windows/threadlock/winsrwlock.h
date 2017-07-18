@@ -10,7 +10,10 @@
 #pragma once
 
 #include "../../ilocker.h"
+#include "../unicodeconverter.h"
 #include "windows.h"
+
+typedef bool(__cdecl *TrySrwLock)(PSRWLOCK);
 
 /*!
 \class WinSRWLock winsrwlock.h "server\desktop\src\cross\windows\threadlock\winsrwlock.h"
@@ -90,8 +93,9 @@ public:
 	bool Unlock() override;
 
 private:
-	volatile long _inUse;
-	volatile long _shared;		///< Flag of shared or exclusive. -1 - unlocked; 0 - shared; 1 - exclusive.
+	TrySrwLock _tryExPtr;		///< Pointer to TryAcquireSRWLockExclusive function
+	TrySrwLock _tryShPtr;		///< Pointer to TryAcquireSRWLockShared function
+	volatile long _shared;		///< Flag of shared or exclusive. -1 - unlocked; 0 - exclusive; 1 - shared.
 	bool _ready;				///< Flag is true if srw lock was init.
 	SRWLOCK _srw;				///< SRW speciment.
 };
