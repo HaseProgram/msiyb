@@ -9,89 +9,93 @@
 
 #pragma once
 
+#include <windows.h>
 #include "../../ilocker.h"
-#include "windows.h"
 
-/*!
-\class WinCriticalSection wincriticalsection.h "server\desktop\src\cross\windows\threadlock\wincriticalsection.h"
-\brief  Structure of critical section.
-Provides access to critical section.
-*/
-class WinCriticalSection : public ILocker
+namespace MSIYBCore
 {
-public:
 	/*!
-	Constructor. Set SpinLock count.
-	\param[in] spinLockCount Amount of spinlock iterations before system switches in kernel mode.
+	\class WinCriticalSection wincriticalsection.h "server\desktop\src\cross\windows\threadlock\wincriticalsection.h"
+	\brief  Structure of critical section.
+	Provides access to critical section.
 	*/
-	WinCriticalSection(unsigned long spinLockCount = 0);
+	class WinCriticalSection : public ILocker
+	{
+	public:
+		/*!
+		Constructor. Set SpinLock count.
+		\param[in] spinLockCount Amount of spinlock iterations before system switches in kernel mode.
+		*/
+		WinCriticalSection(unsigned long spinLockCount = 0);
 
-	/*!
-	Constructor copy
-	\param[in] other CriticalSection object to copy
-	*/
-	WinCriticalSection(const WinCriticalSection& other);
+		/*!
+		Constructor copy
+		\param[in] other CriticalSection object to copy
+		*/
+		WinCriticalSection(const WinCriticalSection& other);
 
-	/*!
-	Constructor transfer
-	\param[in] other CriticalSection object to transfer
-	*/
-	WinCriticalSection(WinCriticalSection&& other);
+		/*!
+		Constructor transfer
+		\param[in] other CriticalSection object to transfer
+		*/
+		WinCriticalSection(WinCriticalSection&& other);
 
-	/*!
-	Copy.
-	\param[in] other CriticalSection object to copy
-	*/
-	WinCriticalSection& operator=(const WinCriticalSection& other);
+		/*!
+		Copy.
+		\param[in] other CriticalSection object to copy
+		*/
+		WinCriticalSection& operator=(const WinCriticalSection& other);
 
-	/*!
-	Deletes critical section.
-	*/
-	~WinCriticalSection();
+		/*!
+		Deletes critical section.
+		*/
+		~WinCriticalSection();
 
-	/*!
-	Initialise critical section with specified attributes.
-	\param[in] spinLockCount Iteration amount of spinlock before OS switch into kernel mode.
-	*/
-	void Init(unsigned long spinLockCount = 0);
+		/*!
+		Initialise critical section with specified attributes.
+		\param[in] spinLockCount Iteration amount of spinlock before OS switch into kernel mode.
+		*/
+		void Init(unsigned long spinLockCount = 0);
 
-	/*!
-	Enter the critical section.
-	If another thread has already locked the criticalsection,
-	a call to lock will block execution until the lock is acquired.
-	\return always TRUE.
-	*/
-	bool Lock() override;
+		/*!
+		Enter the critical section.
+		If another thread has already locked the criticalsection,
+		a call to lock will block execution until the lock is acquired.
+		\return always TRUE.
+		*/
+		bool Lock() override;
 
-	/*!
-	Unavailable for critical section object.
-	\return FALSE
-	*/
-	bool LockShared() override;
+		/*!
+		Unavailable for critical section object.
+		\return FALSE
+		*/
+		bool LockShared() override;
 
-	/*!
-	Try to enter critical section.
-	If another thread has already entered,
-	function returns false immediatly.
-	\return TRUE if thread has entered critical section and FALSE in other case.
-	*/
-	bool TryLock() override;
+		/*!
+		Try to enter critical section.
+		If another thread has already entered,
+		function returns false immediatly.
+		\return TRUE if thread has entered critical section and FALSE in other case.
+		*/
+		bool TryLock() override;
 
-	/*!
-	Unavailable for critical section object.
-	\return FALSE
-	*/
-	bool TryLockShared() override;
+		/*!
+		Unavailable for critical section object.
+		\return FALSE
+		*/
+		bool TryLockShared() override;
 
-	/*!
-	Leaves the critical section, if it's active.
-	\return TRUE if succeed and FALSE if thread didn't enter in critical section.
-	*/
-	bool Unlock() override;
+		/*!
+		Leaves the critical section, if it's active.
+		\return TRUE if succeed and FALSE if thread didn't enter in critical section.
+		*/
+		bool Unlock() override;
 
-private:
-	bool _ready;				///< Flag is true if critical section was init.
-	int _inUse;					///< Flag is above 0 if critical section is in use.
-	CRITICAL_SECTION _critical;	///< Critical section speciment.
-	DWORD _spinLockCount;		///< Iteration amount of spinlock before OS switch into kernel mode.
-};
+	private:
+		bool _ready;				///< Flag is true if critical section was init.
+		int _inUse;					///< Flag is above 0 if critical section is in use.
+		CRITICAL_SECTION _critical;	///< Critical section speciment.
+		DWORD _spinLockCount;		///< Iteration amount of spinlock before OS switch into kernel mode.
+	};
+
+}

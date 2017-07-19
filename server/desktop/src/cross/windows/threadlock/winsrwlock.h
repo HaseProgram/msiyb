@@ -9,93 +9,96 @@
 
 #pragma once
 
+#include <windows.h>
 #include "../../ilocker.h"
 #include "../unicodeconverter.h"
-#include "windows.h"
 
-typedef bool(__cdecl *TrySrwLock)(PSRWLOCK);
-
-/*!
-\class WinSRWLock winsrwlock.h "server\desktop\src\cross\windows\threadlock\winsrwlock.h"
-\brief  Structure of SRW lock.
-*/
-class WinSRWLock : public ILocker
+namespace MSIYBCore
 {
-public:
-	/*!
-	Constructor. Empty.
-	*/
-	WinSRWLock();
+	typedef bool(__cdecl *TrySrwLock)(PSRWLOCK);
 
 	/*!
-	Constructor copy
-	\param[in] other SRWLock object to copy
+	\class WinSRWLock winsrwlock.h "server\desktop\src\cross\windows\threadlock\winsrwlock.h"
+	\brief  Structure of SRW lock.
 	*/
-	WinSRWLock(const WinSRWLock& other);
+	class WinSRWLock : public ILocker
+	{
+	public:
+		/*!
+		Constructor. Empty.
+		*/
+		WinSRWLock();
 
-	/*!
-	Constructor transfer
-	\param[in] other SRWLock object to transfer
-	*/
-	WinSRWLock(WinSRWLock&& other);
+		/*!
+		Constructor copy
+		\param[in] other SRWLock object to copy
+		*/
+		WinSRWLock(const WinSRWLock& other);
 
-	/*!
-	Copy.
-	\param[in] other SRWLock object to copy
-	*/
-	WinSRWLock& operator=(const WinSRWLock& other);
+		/*!
+		Constructor transfer
+		\param[in] other SRWLock object to transfer
+		*/
+		WinSRWLock(WinSRWLock&& other);
 
-	/*!
-	Deletes critical section.
-	*/
-	~WinSRWLock();
+		/*!
+		Copy.
+		\param[in] other SRWLock object to copy
+		*/
+		WinSRWLock& operator=(const WinSRWLock& other);
 
-	/*!
-	Initialise SRW lock.
-	*/
-	void Init();
+		/*!
+		Deletes critical section.
+		*/
+		~WinSRWLock();
 
-	/*!
-	Enter the SRW lock. Exclusive lock. (For writers).
-	If another thread has already locked the srwlock,
-	a call to lock will block execution until the lock is acquired.
-	\return always TRUE.
-	*/
-	bool Lock() override;
+		/*!
+		Initialise SRW lock.
+		*/
+		void Init();
 
-	/*!
-	Locks the locker object in shared mode
-	so other reader thread can use it as well.
-	\return always TRUE.
-	*/
-	bool LockShared() override;
+		/*!
+		Enter the SRW lock. Exclusive lock. (For writers).
+		If another thread has already locked the srwlock,
+		a call to lock will block execution until the lock is acquired.
+		\return always TRUE.
+		*/
+		bool Lock() override;
 
-	/*!
-	Try to enter critical section.
-	If another thread has already entered,
-	function returns false immediatly.
-	\return TRUE if thread has been locked and FALSE in other case.
-	*/
-	bool TryLock() override;
+		/*!
+		Locks the locker object in shared mode
+		so other reader thread can use it as well.
+		\return always TRUE.
+		*/
+		bool LockShared() override;
 
-	/*!
-	Try to lock the locker object in shared mode.
-	If the call is successful, the calling thread takes ownership of the lock.
-	function returns false immediatly.
-	\return TRUE if the state of specified object is signaled and FALSE if object already locked.
-	*/
-	bool TryLockShared() override;
+		/*!
+		Try to enter critical section.
+		If another thread has already entered,
+		function returns false immediatly.
+		\return TRUE if thread has been locked and FALSE in other case.
+		*/
+		bool TryLock() override;
 
-	/*!
-	Leaves the critical section, if it's active.
-	\return TRUE if succeed and FALSE if thread didn't enter in critical section.
-	*/
-	bool Unlock() override;
+		/*!
+		Try to lock the locker object in shared mode.
+		If the call is successful, the calling thread takes ownership of the lock.
+		function returns false immediatly.
+		\return TRUE if the state of specified object is signaled and FALSE if object already locked.
+		*/
+		bool TryLockShared() override;
 
-private:
-	TrySrwLock _tryExPtr;		///< Pointer to TryAcquireSRWLockExclusive function
-	TrySrwLock _tryShPtr;		///< Pointer to TryAcquireSRWLockShared function
-	volatile long _shared;		///< Flag of shared or exclusive. -1 - unlocked; 0 - exclusive; 1 - shared.
-	bool _ready;				///< Flag is true if srw lock was init.
-	SRWLOCK _srw;				///< SRW speciment.
-};
+		/*!
+		Leaves the critical section, if it's active.
+		\return TRUE if succeed and FALSE if thread didn't enter in critical section.
+		*/
+		bool Unlock() override;
+
+	private:
+		TrySrwLock _tryExPtr;		///< Pointer to TryAcquireSRWLockExclusive function
+		TrySrwLock _tryShPtr;		///< Pointer to TryAcquireSRWLockShared function
+		volatile long _shared;		///< Flag of shared or exclusive. -1 - unlocked; 0 - exclusive; 1 - shared.
+		bool _ready;				///< Flag is true if srw lock was init.
+		SRWLOCK _srw;				///< SRW speciment.
+	};
+}

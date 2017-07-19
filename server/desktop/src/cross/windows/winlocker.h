@@ -13,17 +13,9 @@
 #include "threadlock\wincriticalsection.h"
 #include "threadlock\winsrwlock.h"
 
-/*!
-\class WinLocker winlocker.h "server\desktop\src\cross\windows\winlocker.h"
-\brief  Factory of locker objects.
-*/
-class WinLocker
+namespace MSIYBCore
 {
-public:
-	/*!
-	Determine which type of locker object is the best depending on incoming parameters.
-	\param[in] attributes Structure that defines locker parameters.
-	\return New locker object.
-	*/
-	static ILocker* GetLocker(LockerAttr attributes);
-};
+	typedef WinCriticalSection DefaultLock;
+	typedef WinMutex Mutex;
+	typedef WinSRWLock RWLock;
+}

@@ -186,7 +186,6 @@
     <ClCompile Include="cross\windows\threadlock\winsrwlock.cpp" />
     <ClCompile Include="cross\windows\unicodeconverter.cpp" />
     <ClCompile Include="cross\windows\winfile.cpp" />
-    <ClCompile Include="cross\windows\winlocker.cpp" />
     <ClCompile Include="cross\windows\winsocket.cpp" />
     <ClCompile Include="cross\windows\winthread.cpp" />
     <ClCompile Include="main.cpp" />

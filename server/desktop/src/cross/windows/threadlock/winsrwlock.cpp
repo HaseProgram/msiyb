@@ -1,4 +1,5 @@
 #include "winsrwlock.h"
+using MSIYBCore::WinSRWLock;
 
 WinSRWLock::WinSRWLock()
 {

@@ -164,9 +164,6 @@
     <ClCompile Include="common\locker.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="cross\windows\winlocker.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="cross\windows\threadlock\wincriticalsection.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>

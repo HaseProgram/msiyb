@@ -1,8 +1,12 @@
 #include "winmutex.h"
 
+using MSIYBCore::WinMutex;
+
 WinMutex::WinMutex(unsigned long timeout)
 {
 	_timeout = timeout;
+	Init(t_secattr::ENULL, FALSE, NULL, timeout);
+	Create();
 }
 
 WinMutex::WinMutex(const WinMutex& other)

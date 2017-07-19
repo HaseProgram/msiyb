@@ -1,5 +1,7 @@
 #include "wincriticalsection.h"
 
+using MSIYBCore::WinCriticalSection;
+
 WinCriticalSection::WinCriticalSection(unsigned long spinLockCount)
 {
 	_spinLockCount = spinLockCount;

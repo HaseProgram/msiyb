@@ -1,8 +1,24 @@
 #include "locker.h"
 
-Locker::Locker(ILocker& locker) : _locker(locker)
+using MSIYBCore::Locker;
+
+Locker::Locker(ILocker& locker, LockMethod lockMethod) : _locker(locker), _state(false)
 {
-	_locker.Lock();
+	switch (lockMethod)
+	{
+	case LockMethod::ELOCKDEFAULT:
+		_state = _locker.Lock();
+		break;
+	case LockMethod::ELOCKTRY:
+		_state = _locker.TryLock();
+		break;
+	case LockMethod::ELOCKSHARED:
+		_state = _locker.LockShared();
+		break;
+	case LockMethod::ELOCKTRYSHARED:
+		_state = _locker.TryLockShared();
+		break;
+	}
 }
 
 Locker::~Locker()
@@ -10,7 +26,7 @@ Locker::~Locker()
 	_locker.Unlock(); 
 }
 
-ILocker* Locker::GetLocker(LockerAttr attributes)
+bool MSIYBCore::Locker::WasLocked()
 {
-	return OSLocker::GetLocker(attributes);
+	return _state;
 }

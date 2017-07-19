@@ -11,37 +11,48 @@
 
 #ifdef _WIN32
 #include "../cross/windows/winlocker.h"
-typedef WinLocker OSLocker;
 #elif _unix_
 #include "../cross/unix/unixlocker.h"
-typedef UnixLocker OSLocker;
 #endif
 
-/*!
-\class Locker locker.h "server\desktop\src\common\locker.h"
-\brief  RAII for mutex, spinlock, SRWlock, critical etc
-*/
-class Locker
-{
-public:
-	/*!
-	Lock object.
-	\param[in] locker Locker object.
-	*/
-	Locker(ILocker& locker);
+using MSIYBCore::ILocker;
+
+namespace MSIYBCore {
+
+	typedef enum
+	{
+		ELOCKDEFAULT,
+		ELOCKTRY,
+		ELOCKSHARED,
+		ELOCKTRYSHARED
+	} LockMethod;
 
 	/*!
-	Unlock object.
+	\class Locker locker.h "server\desktop\src\common\locker.h"
+	\brief  RAII for mutex, spinlock, SRWlock, critical etc
 	*/
-	~Locker();
+	class Locker
+	{
+	public:
+		/*!
+		Lock object.
+		\param[in] locker Locker object.
+		*/
+		Locker(ILocker& locker, LockMethod lockMethod = LockMethod::ELOCKDEFAULT);
 
-	/*!
-	Determine which type of locker object is the best depending on incoming parameters.
-	\param[in] attributes Structure that defines locker parameters.
-	\return New locker object.
-	*/
-	static ILocker* GetLocker(LockerAttr attributes);
+		/*!
+		Unlock object.
+		*/
+		~Locker();
 
-private:
-	ILocker& _locker;	///< Locker object
-};
+		/*!
+		Check success of lock.
+		\return TRUE if the state of specified object is signaled and FALSE in other case
+		*/
+		bool WasLocked();
+
+	private:
+		ILocker& _locker;	///< Locker object
+		bool _state;		/// true if lock succeed false in other case
+	};
+}
