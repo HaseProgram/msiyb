@@ -1,6 +1,7 @@
 #include "locker.h"
 
 using MSIYBCore::Locker;
+using MSIYBCore::LockMethod;
 
 Locker::Locker(ILocker& locker, LockMethod lockMethod) : _locker(locker), _state(false)
 {
