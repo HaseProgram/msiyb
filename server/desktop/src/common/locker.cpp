@@ -1,5 +1,6 @@
 #include "locker.h"
 
+using MSIYBCore::ILocker;
 using MSIYBCore::Locker;
 using MSIYBCore::LockMethod;
 
@@ -27,7 +28,7 @@ Locker::~Locker()
 	_locker.Unlock(); 
 }
 
-bool MSIYBCore::Locker::WasLocked()
+bool Locker::WasLocked()
 {
 	return _state;
 }

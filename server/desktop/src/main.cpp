@@ -1,11 +1,15 @@
 #include "main.h"
-
+#include "common\locker.h"
 using namespace std;
+using namespace MSIYBCore;
 
 int main()
 {
 	auto_ptr<Server> serverInstance(new Server);
 	
+	DefaultLock locker;
+	Locker(locker, LockMethod::ELOCKTRYSHARED);	
+
 	int failCount = 0;
 	while (failCount < 5)
 	{

@@ -15,8 +15,6 @@
 #include "../cross/unix/unixlocker.h"
 #endif
 
-using MSIYBCore::ILocker;
-
 namespace MSIYBCore {
 
 	typedef enum

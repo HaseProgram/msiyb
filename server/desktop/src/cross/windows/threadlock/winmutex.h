@@ -11,7 +11,6 @@
 
 #include <windows.h>
 #include "../../ilocker.h"
-#include "../unicodeconverter.h"
 
 namespace MSIYBCore
 {
@@ -46,19 +45,16 @@ namespace MSIYBCore
 		\param[in] mutexAttr Determines if mutex handle can be inherited by child.
 		\param[in] initialOwner If this value is TRUE and the caller created the mutex, the calling thread obtains initial ownership of the mutex object.
 		\param[in] timeout Timeout after which OS stop trying access locker object.
-		\param[in] name The name of the mutex object.
-		\param[in] timeout Timeout after which OS stop trying access locker object.
 		*/
-		WinMutex(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name, unsigned long timeout = INFINITE);
+		WinMutex(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, unsigned long timeout = INFINITE);
 
 		/*!
 		Creates mutex with specified attributes.
 		\param[in] mutexAttr Determines if mutex handle can be inherited by child.
 		\param[in] initialOwner If this value is TRUE and the caller created the mutex, the calling thread obtains initial ownership of the mutex object.
-		\param[in] name The name of the mutex object.
 		\param[in] timeout Timeout after which OS stop trying access locker object.
 		*/
-		WinMutex(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout = INFINITE);
+		WinMutex(t_secattr mutexAttr, bool initialOwner, unsigned long timeout = INFINITE);
 
 		/*!
 		Empty.
@@ -117,19 +113,17 @@ namespace MSIYBCore
 		Initialise mutex with specified attributes.
 		\param[in] mutexAttr Determines if mutex handle can be inherited by child.
 		\param[in] initialOwner If this value is TRUE and the caller created the mutex, the calling thread obtains initial ownership of the mutex object.
-		\param[in] name The name of the mutex object.
 		\param[in] timeout Timeout after which OS stop trying access locker object.
 		*/
-		void Init(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout = INFINITE);
+		void Init(t_secattr mutexAttr, bool initialOwner, unsigned long timeout = INFINITE);
 
 		/*!
 		Initialise mutex with specified attributes.
 		\param[in] mutexAttr Determines if mutex handle can be inherited by child.
 		\param[in] initialOwner If this value is TRUE and the caller created the mutex, the calling thread obtains initial ownership of the mutex object.
-		\param[in] name The name of the mutex object.
 		\param[in] timeout Timeout after which OS stop trying access locker object.
 		*/
-		void Init(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name, unsigned long timeout = INFINITE);
+		void Init(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, unsigned long timeout = INFINITE);
 
 		/*!
 		Create mutex object;
@@ -139,7 +133,6 @@ namespace MSIYBCore
 		HANDLE _hMutex;						///< Handle of mutex object.
 		LPSECURITY_ATTRIBUTES _mutexAttr;	///< Security attributes
 		BOOL _initialOwner;					///< The calling thread obtains initial ownership of the mutex object.
-		LPCTSTR _name;						///< Mutex name.
 		unsigned long _timeout;				///< Timeout after which OS stop trying access locker object.
 	};
 }

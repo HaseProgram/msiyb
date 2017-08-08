@@ -5,7 +5,7 @@ using MSIYBCore::WinMutex;
 WinMutex::WinMutex(unsigned long timeout)
 {
 	_timeout = timeout;
-	Init(t_secattr::ENULL, FALSE, NULL, timeout);
+	Init(t_secattr::ENULL, FALSE, timeout);
 	Create();
 }
 
@@ -14,7 +14,6 @@ WinMutex::WinMutex(const WinMutex& other)
 	_hMutex = other._hMutex;
 	_mutexAttr = other._mutexAttr;
 	_initialOwner = other._initialOwner;
-	_name = other._name;
 	_timeout = other._timeout;
 }
 
@@ -23,19 +22,18 @@ WinMutex::WinMutex(WinMutex&& other)
 	_hMutex = other._hMutex;
 	_mutexAttr = other._mutexAttr;
 	_initialOwner = other._initialOwner;
-	_name = other._name;
 	_timeout = other._timeout;
 }
 
-WinMutex::WinMutex(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout)
+WinMutex::WinMutex(t_secattr mutexAttr, bool initialOwner, unsigned long timeout)
 {
-	Init(mutexAttr, initialOwner, name, timeout);
+	Init(mutexAttr, initialOwner, timeout);
 	Create();
 }
 
-WinMutex::WinMutex(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name, unsigned long timeout)
+WinMutex::WinMutex(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, unsigned long timeout)
 {
-	Init(mutexAttr, initialOwner, name, timeout);
+	Init(mutexAttr, initialOwner, timeout);
 	Create();
 }
 
@@ -48,32 +46,28 @@ WinMutex & WinMutex::operator=(const WinMutex & other)
 	_hMutex = other._hMutex;
 	_mutexAttr = other._mutexAttr;
 	_initialOwner = other._initialOwner;
-	_name = other._name;
 	_timeout = other._timeout;
 	return *this;
 }
 
-void WinMutex::Init(t_secattr mutexAttr, bool initialOwner, char* name, unsigned long timeout)
+void WinMutex::Init(t_secattr mutexAttr, bool initialOwner, unsigned long timeout)
 {
 	_timeout = timeout;
-	LPSECURITY_ATTRIBUTES securityAttr;
+	LPSECURITY_ATTRIBUTES securityAttr = NULL;
 	switch (mutexAttr)
 	{
 	case ENULL:
 		securityAttr = NULL;
 		break;
 	}
-	TCHAR* tName;
-	ConvertCharToTCHAR(name, tName);
-	Init(securityAttr, initialOwner, tName);
+	Init(securityAttr, initialOwner);
 }
 
-void WinMutex::Init(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, LPCTSTR name, unsigned long timeout)
+void WinMutex::Init(LPSECURITY_ATTRIBUTES mutexAttr, BOOL initialOwner, unsigned long timeout)
 {
 	_timeout = timeout;
 	_mutexAttr = mutexAttr;
 	_initialOwner = initialOwner;
-	_name = name;
 }
 
 void WinMutex::Create()
@@ -81,7 +75,7 @@ void WinMutex::Create()
 	_hMutex = CreateMutex(
 		_mutexAttr,
 		_initialOwner,
-		_name
+		NULL
 	);
 }
 

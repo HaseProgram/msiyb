@@ -126,6 +126,18 @@
     <ClInclude Include="cross\windows\threadlock\winsrwlock.h">
       <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
     </ClInclude>
+    <ClInclude Include="common\threadpool.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\worker.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\winsemaphore.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\wincv.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -168,6 +180,12 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="cross\windows\threadlock\winsrwlock.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\winsemaphore.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\wincv.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
