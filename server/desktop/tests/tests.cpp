@@ -1,11 +1,17 @@
-// tests.cpp: определяет точку входа для консольного приложения.
-//
+#include <CppUnitTest.h>  
+#include "../src/common/file.h"  
 
-#include "stdafx.h"
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-
-int main()
+namespace TestCore
 {
-    return 0;
-}
+	TEST_CLASS(File)
+	{
+	public:
+		TEST_METHOD(Test1)
+		{
+			File testFile;
 
+		}
+	};
+}

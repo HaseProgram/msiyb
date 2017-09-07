@@ -8,14 +8,9 @@
 */
 
 #pragma once
-
-#define MIN_BUFFER_SIZE 128
-#define FILE_BUFFER_SIZE 1024
-#define MIN_STRING_SIZE 128
-#define MIN_STRING_ARRAY_SIZE 2
-
-#include "../defines.h"
-#include "../tools/exceptions/fileexception.h"
+#include "..\defines.h"
+#include "windows\unicodeconverter.h"
+#include "..\tools\exceptions\fileexception.h"
 
 /// File meta data structure
 typedef struct
@@ -33,7 +28,7 @@ typedef enum
 	WRITENEWFILE,	///< Creates new file 
 	WRITE,			///< Open existing file to write (or truncate existing file to write after)
 	READWRITE,		///< Open file for reading and writing (will truncate existing file)
-	WRRITEATTEHEND	///< Write in end of the existing file or create new file
+	WRITEATTHEEND	///< Write in end of the existing file or create new file
 } FileOpenMode;
 
 /// Position used as reference for the offset.

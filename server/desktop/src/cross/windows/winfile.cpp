@@ -274,7 +274,7 @@ size_lt WinFile::ReadAllBytes(const char *fileName, byte **block)
 	byte *blockT = new byte[fSize];
 	if (!blockT)
 	{
-		ThrowException("Cant Aloc memory for block arr");
+		ThrowFileExceptionWithCode("Cant allocate memory for block array", GetLastError());
 	}
 
 	fSize = WinFile::ReadBlock(hFile, blockT, fSize);

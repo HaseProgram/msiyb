@@ -90,7 +90,7 @@ void File::Open(FileOpenMode mode)
 	{
 		Close();
 	}
-	if (mode == FileOpenMode::WRRITEATTEHEND)
+	if (mode == FileOpenMode::WRITEATTHEEND)
 	{
 		_file->Open(FileOpenMode::READWRITE);
 		_file->Seek(0, SeekReference::END);
@@ -110,7 +110,7 @@ void File::Open(const char *fileName, FileOpenMode mode)
 
 	strcpy(_fileName, fileName);
 
-	if (mode == FileOpenMode::WRRITEATTEHEND)
+	if (mode == FileOpenMode::WRITEATTHEEND)
 	{
 		_file->Open(fileName, FileOpenMode::READWRITE);
 		_file->Seek(0, SeekReference::END);

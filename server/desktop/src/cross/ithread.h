@@ -9,13 +9,8 @@
 
 #pragma once
 #include "../defines.h"
-#include "../tools/exceptions/thredexception.h"
-
-/// Security attributes
-typedef enum
-{
-	ENULL	///< The object is assigned the default security descriptor
-} t_secattr;
+#include "threadsecurity.h"
+#include "../tools/exceptions/threadexception.h"
 
 /// The flags that control the creation of the thread.
 typedef enum
@@ -33,7 +28,6 @@ Defined methods for threads should be realized in OS depended classes
 class IThread
 {
 public:
-	int threadID; /// Local thread ID.
 
 	/*!
 	Set up thread before launch

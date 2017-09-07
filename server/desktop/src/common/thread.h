@@ -3,12 +3,11 @@
 \authors Dmitry Zaitsev
 \copyright © MSiYB 2017
 \license GPL license
-\version 1.0
+\version 2.0
 \date 02 March 2017
 */
 
 #pragma once
-#define MAX_INT 2147483646
 
 #ifdef _WIN32
 #include "../cross/windows/winthread.h"
@@ -18,30 +17,15 @@ typedef WinThread OSThread;
 typedef UnixThread OSThread;
 #endif
 
-#include <vector>
-
-class Thread;
-
-/// Single thread info
-typedef struct
-{
-	int threadID;				///< Current thread local ID.
-	OSThread *threadOSPtr;		///< Thread ptr on OS implementation.
-	void *result;				///< Value returned from thread function.
-	Thread *thr;				///< Thread object.
-} ThreadData;
-
 /*!
 \class Thread thread.h "server\desktop\src\common\thread.h"
 \brief  Thread interface.
-Provide interface to common thread structure and it's action.
+Provide interface to single thread structure and it's action.
 Factory for unix/bsd/windows structure of thread.
 */
 class Thread
 {
 public:
-	static int lastThreadID;				///< ID of last thread
-	static vector<ThreadData*> threadList;	///< List of launched threads
 
 	/*!
 	Initialises OS depended thread structure.
@@ -50,7 +34,6 @@ public:
 
 	/*!
 	Dealocates memory of OS depended object.
-	Decrease active threads count
 	*/
 	~Thread();
 
@@ -64,32 +47,23 @@ public:
 	*/
 	int Start(void *threadFunc, void *threadFuncArgs, void *result = nullptr);
 
-	/*!
-	Suspend programm before all threads in pool completed their work.
-	*/
-	void WaitToComplete();
+	void* GetResult();
 
 	/*!
 	Checks if thread completed it's work
 	\param[in] threadID Id if thread to check.
 	\return TRUE if completed, FALSE in other case
 	*/
-	bool IsCompleted(int threadID);
+	bool IsCompleted();
 
 	/*!
-	Looks for completed threads in threads list and free them.
+	Returns maximum amount of threads can be launched. Static.
+	\return Maximum amount of threads can be launched.
 	*/
-	static void CheckListCompleted();
-
-	/*!
-	Looks if thread completed and deletes it from thread list.
-	\param[in] ID Id of thread to check.
-	*/
-	static void CheckThreadCompleted(int threadID);
+	static int GetMaxThreadCount();
 
 private:
-	vector<ThreadData*> threadPool;	///< Pointers to threads launched from this object.
+	int _id;				///< Current thread ID.
+	void *_result;			///< Value returned from thread function.
+	OSThread *_thread;		///< OS depended thread structure.
 };
-
-int Thread::lastThreadID = -1;
-vector<ThreadData*> Thread::threadList;

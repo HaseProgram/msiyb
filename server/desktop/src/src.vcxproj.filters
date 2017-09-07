@@ -31,6 +31,9 @@
     <Filter Include="Заголовочные файлы\tools\exception">
       <UniqueIdentifier>{5db9a1d5-140e-4f04-bbbe-0b37417e4f8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\cross\windows\threadlock">
+      <UniqueIdentifier>{c5b7a156-2132-40e4-b01f-54eeb006ebc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -87,14 +90,53 @@
     <ClInclude Include="tools\exceptions\socketexception.h">
       <Filter>Заголовочные файлы\tools\exception</Filter>
     </ClInclude>
-    <ClInclude Include="tools\exceptions\thredexception.h">
-      <Filter>Заголовочные файлы\tools\exception</Filter>
-    </ClInclude>
     <ClInclude Include="server.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="defines.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\threadexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\threadsecurity.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\unicodeconverter.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\exceptions\lockerexception.h">
+      <Filter>Заголовочные файлы\tools\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\ilocker.h">
+      <Filter>Заголовочные файлы\cross</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\winmutex.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
+    <ClInclude Include="common\locker.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\winlocker.h">
+      <Filter>Заголовочные файлы\cross\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\wincriticalsection.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\winsrwlock.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
+    <ClInclude Include="common\threadpool.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\worker.h">
+      <Filter>Заголовочные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\winsemaphore.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
+    </ClInclude>
+    <ClInclude Include="cross\windows\threadlock\wincv.h">
+      <Filter>Заголовочные файлы\cross\windows\threadlock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +165,27 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="server.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\unicodeconverter.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\winmutex.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="common\locker.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\wincriticalsection.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\winsrwlock.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\winsemaphore.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="cross\windows\threadlock\wincv.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
